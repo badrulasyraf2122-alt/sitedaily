@@ -44,48 +44,71 @@ label{font-size:12px;color:var(--mut);display:block;margin:8px 0 2px}
 .banner{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:10px}
 .toast{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));background:#222;color:#fff;padding:10px 12px;border-radius:10px;z-index:40;font-size:14px}
 .pick{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:6px;color:var(--ink);font:inherit}
+
+.tabs.wrap{flex-wrap:wrap;overflow:visible}
+#printArea{display:none}
+@media print{
+ :root{--bg:#fff;--card:#fff;--ink:#000;--mut:#555;--line:#ccc;--pri:#0f5c4d;--pri2:#e3f1ed;--bad:#b42318;--ok:#18794e;--warn:#b45309;--warnbg:#fff4e0}
+ @page{size:A4 landscape;margin:10mm}
+ body.printing>*:not(#printArea){display:none!important}
+ body.printing #printArea{display:block}
+ body{padding:0;background:#fff;color:#000}
+ table{font-size:9px}th{position:static}.card{break-inside:avoid}h2{break-after:avoid}
+}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - Telecommunication Duct","client":"","contract_sum":0,"retention_pct":5,"currency":"RM","spacer_edge":1,"spacer_spacing":2,"spacer_extra":2,"plugs_per_way":2,"subduct_lines":3,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"rate_items":[{"id":"rt_TEL-01","project_id":"gpr1a","code":"TEL-01","subtrade":"Telecommunication Work","description":"110mm Duct","unit":"m","pipe_size":110,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-02","project_id":"gpr1a","code":"TEL-02","subtrade":"Telecommunication Work","description":"50mm Duct","unit":"m","pipe_size":50,"rate":12,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-03","project_id":"gpr1a","code":"TEL-03","subtrade":"Telecommunication Work","description":"Subduct","unit":"m","pipe_size":null,"rate":5,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-04","project_id":"gpr1a","code":"TEL-04","subtrade":"Telecommunication Work","description":"Mandrel Test","unit":"m","pipe_size":null,"rate":3,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_MV-01","project_id":"gpr1a","code":"MV-01","subtrade":"Medium Voltage","description":"200mm HDPE Pipe","unit":"m","pipe_size":200,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_LV-01","project_id":"gpr1a","code":"LV-01","subtrade":"Low Voltage","description":"160mm HDPE Pipe","unit":"m","pipe_size":160,"rate":10,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_ELV-01","project_id":"gpr1a","code":"ELV-01","subtrade":"Extra Low Voltage","description":"160mm HDPE Pipe","unit":"m","pipe_size":160,"rate":10,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_SP-01","project_id":"gpr1a","code":"SP-01","subtrade":"Security","description":"110mm Duct","unit":"m","pipe_size":110,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"labour_types":[{"id":"lt_1","project_id":"gpr1a","trade":"Foreman","hourly_rate":12,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_2","project_id":"gpr1a","trade":"Pipe layer","hourly_rate":8,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_3","project_id":"gpr1a","trade":"General worker","hourly_rate":6,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_4","project_id":"gpr1a","trade":"Excavator operator","hourly_rate":12,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"materials":[{"id":"mt_P110","project_id":"gpr1a","code":"P110","name":"HDPE pipe 110mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":26.7,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P63","project_id":"gpr1a","code":"P63","name":"HDPE pipe 63mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":8.9,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P50","project_id":"gpr1a","code":"P50","name":"HDPE pipe 50mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":8.9,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P40","project_id":"gpr1a","code":"P40","name":"Sub-duct 40mm","unit":"m","unit_cost":0,"wastage_allow":0.03,"roll_length":250,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS110","project_id":"gpr1a","code":"DS110","name":"Duct spacer 123mm (for 110mm pipe)","unit":"pcs","unit_cost":8.93,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS63","project_id":"gpr1a","code":"DS63","name":"Duct spacer 65mm (for 63mm pipe)","unit":"pcs","unit_cost":8.4,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS50","project_id":"gpr1a","code":"DS50","name":"Duct spacer 65mm (for 50mm pipe)","unit":"pcs","unit_cost":8.4,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP110","project_id":"gpr1a","code":"EP110","name":"End plug 110mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP63","project_id":"gpr1a","code":"EP63","name":"End plug 63mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP50","project_id":"gpr1a","code":"EP50","name":"End plug 50mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"delay_reasons":[{"id":"dr_RAIN","project_id":"gpr1a","code":"RAIN","category":"Weather","name":"Heavy rain","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_MATL","project_id":"gpr1a","code":"MATL","category":"Material","name":"Material not delivered","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_LAB","project_id":"gpr1a","code":"LAB","category":"Labour","name":"Labour shortage","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_EQP","project_id":"gpr1a","code":"EQP","category":"Equipment","name":"Equipment breakdown","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_DWG","project_id":"gpr1a","code":"DWG","category":"Design","name":"Drawing / design query","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_UTIL","project_id":"gpr1a","code":"UTIL","category":"Client / Utility","name":"Utility clash / access / permit","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_OTH","project_id":"gpr1a","code":"OTH","category":"Other","name":"Other","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"work_items":[{"id":"wi_001","project_id":"gpr1a","seq":1,"manhole_ref":"CV4 - 0135 TO CV4 - 0130","ref_code":"EYD","zone":"EW1 - EN1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-01","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_002","project_id":"gpr1a","seq":2,"manhole_ref":"CV4 - 0130 TO CV4 - 0125","ref_code":"EYD","zone":"EN2 - EN3","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_003","project_id":"gpr1a","seq":3,"manhole_ref":"CV4 - 0125 TO CV4 - 0120","ref_code":"EYD","zone":"EN4","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-03","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_004","project_id":"gpr1a","seq":4,"manhole_ref":"CV4 - 0120 TO CV4 - 0115","ref_code":"EYD","zone":"EN5 - E5b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-04","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_005","project_id":"gpr1a","seq":5,"manhole_ref":"CV4 - 0115 TO CV4 - 0110","ref_code":"EYD","zone":"E5b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-05","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_006","project_id":"gpr1a","seq":6,"manhole_ref":"CV4 - 0110 TO CV3 - 0150","ref_code":"EYD","zone":"E5b - ES5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-06","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_007","project_id":"gpr1a","seq":7,"manhole_ref":"CV4 - 0110 TO CV4 - ACV 0105","ref_code":"EYD","zone":"E5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-07","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_008","project_id":"gpr1a","seq":8,"manhole_ref":"CV4 - ACV 0105 TO CV4 - ZCV 100","ref_code":"EYD","zone":"E5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-08","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_009","project_id":"gpr1a","seq":9,"manhole_ref":"CV4 - 0110 TO CV4 - 0600","ref_code":"EYD","zone":"E3b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-09","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_010","project_id":"gpr1a","seq":10,"manhole_ref":"CV4 - 0600 TO CV4 - 0210","ref_code":"EYD","zone":"E2b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-10","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_011","project_id":"gpr1a","seq":11,"manhole_ref":"CV4 - 0210 TO CV4 - 0205","ref_code":"MYD","zone":"E2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-11","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_012","project_id":"gpr1a","seq":12,"manhole_ref":"CV4 - 0205 TO CV4 - ZCV200","ref_code":"MYD","zone":"E2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-12","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_013","project_id":"gpr1a","seq":13,"manhole_ref":"CV4 - 0210 TO CV4 - 0215","ref_code":"MYD","zone":"E1b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_014","project_id":"gpr1a","seq":14,"manhole_ref":"CV4 - 0215 TO CV4 - 0220","ref_code":"MYD","zone":"MS5a - MS4a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_015","project_id":"gpr1a","seq":15,"manhole_ref":"CV4 - 0220 TO CV4 - 0225","ref_code":"MYD","zone":"MS3a - MS2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_016","project_id":"gpr1a","seq":16,"manhole_ref":"CV4 - 0225 TO CV4 - 0605","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_017","project_id":"gpr1a","seq":17,"manhole_ref":"CV4 - 0605 TO CV3 - 0615","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_018","project_id":"gpr1a","seq":18,"manhole_ref":"CV3 - 0615 TO CV3 - 0610","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_019","project_id":"gpr1a","seq":19,"manhole_ref":"CV3 - 0610 TO BUILDING","ref_code":"MYD","zone":"MS1a - MN1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_020","project_id":"gpr1a","seq":20,"manhole_ref":"CV4 - 0605 TO CV4 - ACV 0305","ref_code":"MYD","zone":"MS1a - W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_021","project_id":"gpr1a","seq":21,"manhole_ref":"CV4 - ACV 0305 TO CV4 - 0605","ref_code":"MYD","zone":"W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_022","project_id":"gpr1a","seq":22,"manhole_ref":"CV4 - ACV 0305 TO CV4 - 0310","ref_code":"MYD","zone":"W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_023","project_id":"gpr1a","seq":23,"manhole_ref":"CV4 - 0310 TO CV4 - 0315","ref_code":"MYD","zone":"W5 - W4","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_024","project_id":"gpr1a","seq":24,"manhole_ref":"CV4 - 0315 TO CV4 - 0320","ref_code":null,"zone":"W4 - W2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_025","project_id":"gpr1a","seq":25,"manhole_ref":"CV4 - 0320 TO HUB?","ref_code":null,"zone":"W2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_026","project_id":"gpr1a","seq":26,"manhole_ref":"CV4 - 0320 TO CV4 - 0145","ref_code":null,"zone":"W2 - W1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_027","project_id":"gpr1a","seq":27,"manhole_ref":"CV4 - 0145 TO BUGGY SHED","ref_code":null,"zone":"W1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_028","project_id":"gpr1a","seq":28,"manhole_ref":"CV4 - 0145 TO CV4 - 0140","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_029","project_id":"gpr1a","seq":29,"manhole_ref":"CV4 - 0140 TO CV3 - 0620","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_030","project_id":"gpr1a","seq":30,"manhole_ref":"CV3 - 0620 TO CV3 - 0740","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_031","project_id":"gpr1a","seq":31,"manhole_ref":"CV3 - 0740 TO FUEL GARAGE","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_032","project_id":"gpr1a","seq":32,"manhole_ref":"CV3 - 0740 TO CV3 - 0745","ref_code":"EYD","zone":"EW2 - ES1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_033","project_id":"gpr1a","seq":33,"manhole_ref":"CV3 - 0745 TO BUILDING","ref_code":"EYD","zone":"ES1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_034","project_id":"gpr1a","seq":34,"manhole_ref":"CV4 - 0140 TO CV4 - 0135","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}]};
+const APP_VERSION="3.0 build 20261121-2150";
+const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - Telecommunication Duct","client":"","contract_sum":0,"retention_pct":5,"currency":"RM","spacer_edge":1,"spacer_spacing":2,"spacer_extra":2,"plugs_per_way":2,"subduct_lines":3,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"rate_items":[{"id":"rt_TEL-01","project_id":"gpr1a","code":"TEL-01","subtrade":"Telecommunication Work","description":"110mm Duct","unit":"m","pipe_size":110,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-02","project_id":"gpr1a","code":"TEL-02","subtrade":"Telecommunication Work","description":"50mm Duct","unit":"m","pipe_size":50,"rate":12,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-03","project_id":"gpr1a","code":"TEL-03","subtrade":"Telecommunication Work","description":"Subduct","unit":"m","pipe_size":null,"rate":5,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-04","project_id":"gpr1a","code":"TEL-04","subtrade":"Telecommunication Work","description":"Mandrel Test","unit":"m","pipe_size":null,"rate":3,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_MV-01","project_id":"gpr1a","code":"MV-01","subtrade":"Medium Voltage","description":"200mm HDPE Pipe","unit":"m","pipe_size":200,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_LV-01","project_id":"gpr1a","code":"LV-01","subtrade":"Low Voltage","description":"160mm HDPE Pipe","unit":"m","pipe_size":160,"rate":10,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_ELV-01","project_id":"gpr1a","code":"ELV-01","subtrade":"Extra Low Voltage","description":"160mm HDPE Pipe","unit":"m","pipe_size":160,"rate":10,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_SP-01","project_id":"gpr1a","code":"SP-01","subtrade":"Security","description":"110mm Duct","unit":"m","pipe_size":110,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"labour_types":[{"id":"lt_1","project_id":"gpr1a","trade":"Foreman","hourly_rate":12,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_2","project_id":"gpr1a","trade":"Pipe layer","hourly_rate":8,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_3","project_id":"gpr1a","trade":"General worker","hourly_rate":6,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_4","project_id":"gpr1a","trade":"Excavator operator","hourly_rate":12,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"materials":[{"id":"mt_P110","project_id":"gpr1a","code":"P110","name":"HDPE pipe 110mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":26.7,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P63","project_id":"gpr1a","code":"P63","name":"HDPE pipe 63mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":8.9,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P50","project_id":"gpr1a","code":"P50","name":"HDPE pipe 50mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":8.9,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P40","project_id":"gpr1a","code":"P40","name":"Sub-duct 40mm","unit":"m","unit_cost":0,"wastage_allow":0.03,"roll_length":250,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS110","project_id":"gpr1a","code":"DS110","name":"Duct spacer 123mm (for 110mm pipe)","unit":"pcs","unit_cost":8.93,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS63","project_id":"gpr1a","code":"DS63","name":"Duct spacer 65mm (for 63mm pipe)","unit":"pcs","unit_cost":8.4,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS50","project_id":"gpr1a","code":"DS50","name":"Duct spacer 65mm (for 50mm pipe)","unit":"pcs","unit_cost":8.4,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP110","project_id":"gpr1a","code":"EP110","name":"End plug 110mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP63","project_id":"gpr1a","code":"EP63","name":"End plug 63mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP50","project_id":"gpr1a","code":"EP50","name":"End plug 50mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"delay_reasons":[{"id":"dr_RAIN","project_id":"gpr1a","code":"RAIN","category":"Weather","name":"Heavy rain","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_MATL","project_id":"gpr1a","code":"MATL","category":"Material","name":"Material not delivered","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_LAB","project_id":"gpr1a","code":"LAB","category":"Labour","name":"Labour shortage","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_EQP","project_id":"gpr1a","code":"EQP","category":"Equipment","name":"Equipment breakdown","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_DWG","project_id":"gpr1a","code":"DWG","category":"Design","name":"Drawing / design query","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_UTIL","project_id":"gpr1a","code":"UTIL","category":"Client / Utility","name":"Utility clash / access / permit","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_OTH","project_id":"gpr1a","code":"OTH","category":"Other","name":"Other","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"activities":[{"id":"ac_UNLOAD","project_id":"gpr1a","seq":1,"name":"Unloading material","kind":"support","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"ac_UNROLL","project_id":"gpr1a","seq":2,"name":"Unroll material","kind":"support","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"ac_INSTALL","project_id":"gpr1a","seq":3,"name":"Install pipe","kind":"install","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"ac_SPACER","project_id":"gpr1a","seq":4,"name":"Spacers / sub-duct / end plugs","kind":"support","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"ac_MANDREL","project_id":"gpr1a","seq":5,"name":"Mandrel / inspection","kind":"support","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"ac_BACKFILL","project_id":"gpr1a","seq":6,"name":"Backfill & reinstatement","kind":"support","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"ac_OTHER","project_id":"gpr1a","seq":7,"name":"Other","kind":"support","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"work_items":[{"id":"wi_001","project_id":"gpr1a","seq":1,"manhole_ref":"CV4 - 0135 TO CV4 - 0130","ref_code":"EYD","zone":"EW1 - EN1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-01","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_002","project_id":"gpr1a","seq":2,"manhole_ref":"CV4 - 0130 TO CV4 - 0125","ref_code":"EYD","zone":"EN2 - EN3","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_003","project_id":"gpr1a","seq":3,"manhole_ref":"CV4 - 0125 TO CV4 - 0120","ref_code":"EYD","zone":"EN4","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-03","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_004","project_id":"gpr1a","seq":4,"manhole_ref":"CV4 - 0120 TO CV4 - 0115","ref_code":"EYD","zone":"EN5 - E5b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-04","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_005","project_id":"gpr1a","seq":5,"manhole_ref":"CV4 - 0115 TO CV4 - 0110","ref_code":"EYD","zone":"E5b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-05","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_006","project_id":"gpr1a","seq":6,"manhole_ref":"CV4 - 0110 TO CV3 - 0150","ref_code":"EYD","zone":"E5b - ES5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-06","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_007","project_id":"gpr1a","seq":7,"manhole_ref":"CV4 - 0110 TO CV4 - ACV 0105","ref_code":"EYD","zone":"E5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-07","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_008","project_id":"gpr1a","seq":8,"manhole_ref":"CV4 - ACV 0105 TO CV4 - ZCV 100","ref_code":"EYD","zone":"E5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-08","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_009","project_id":"gpr1a","seq":9,"manhole_ref":"CV4 - 0110 TO CV4 - 0600","ref_code":"EYD","zone":"E3b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-09","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_010","project_id":"gpr1a","seq":10,"manhole_ref":"CV4 - 0600 TO CV4 - 0210","ref_code":"EYD","zone":"E2b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-10","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_011","project_id":"gpr1a","seq":11,"manhole_ref":"CV4 - 0210 TO CV4 - 0205","ref_code":"MYD","zone":"E2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-11","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_012","project_id":"gpr1a","seq":12,"manhole_ref":"CV4 - 0205 TO CV4 - ZCV200","ref_code":"MYD","zone":"E2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-12","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_013","project_id":"gpr1a","seq":13,"manhole_ref":"CV4 - 0210 TO CV4 - 0215","ref_code":"MYD","zone":"E1b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_014","project_id":"gpr1a","seq":14,"manhole_ref":"CV4 - 0215 TO CV4 - 0220","ref_code":"MYD","zone":"MS5a - MS4a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_015","project_id":"gpr1a","seq":15,"manhole_ref":"CV4 - 0220 TO CV4 - 0225","ref_code":"MYD","zone":"MS3a - MS2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_016","project_id":"gpr1a","seq":16,"manhole_ref":"CV4 - 0225 TO CV4 - 0605","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_017","project_id":"gpr1a","seq":17,"manhole_ref":"CV4 - 0605 TO CV3 - 0615","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_018","project_id":"gpr1a","seq":18,"manhole_ref":"CV3 - 0615 TO CV3 - 0610","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_019","project_id":"gpr1a","seq":19,"manhole_ref":"CV3 - 0610 TO BUILDING","ref_code":"MYD","zone":"MS1a - MN1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_020","project_id":"gpr1a","seq":20,"manhole_ref":"CV4 - 0605 TO CV4 - ACV 0305","ref_code":"MYD","zone":"MS1a - W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_021","project_id":"gpr1a","seq":21,"manhole_ref":"CV4 - ACV 0305 TO CV4 - 0605","ref_code":"MYD","zone":"W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_022","project_id":"gpr1a","seq":22,"manhole_ref":"CV4 - ACV 0305 TO CV4 - 0310","ref_code":"MYD","zone":"W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_023","project_id":"gpr1a","seq":23,"manhole_ref":"CV4 - 0310 TO CV4 - 0315","ref_code":"MYD","zone":"W5 - W4","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_024","project_id":"gpr1a","seq":24,"manhole_ref":"CV4 - 0315 TO CV4 - 0320","ref_code":null,"zone":"W4 - W2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_025","project_id":"gpr1a","seq":25,"manhole_ref":"CV4 - 0320 TO HUB?","ref_code":null,"zone":"W2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_026","project_id":"gpr1a","seq":26,"manhole_ref":"CV4 - 0320 TO CV4 - 0145","ref_code":null,"zone":"W2 - W1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_027","project_id":"gpr1a","seq":27,"manhole_ref":"CV4 - 0145 TO BUGGY SHED","ref_code":null,"zone":"W1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_028","project_id":"gpr1a","seq":28,"manhole_ref":"CV4 - 0145 TO CV4 - 0140","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_029","project_id":"gpr1a","seq":29,"manhole_ref":"CV4 - 0140 TO CV3 - 0620","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_030","project_id":"gpr1a","seq":30,"manhole_ref":"CV3 - 0620 TO CV3 - 0740","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_031","project_id":"gpr1a","seq":31,"manhole_ref":"CV3 - 0740 TO FUEL GARAGE","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_032","project_id":"gpr1a","seq":32,"manhole_ref":"CV3 - 0740 TO CV3 - 0745","ref_code":"EYD","zone":"EW2 - ES1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_033","project_id":"gpr1a","seq":33,"manhole_ref":"CV3 - 0745 TO BUILDING","ref_code":"EYD","zone":"ES1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_034","project_id":"gpr1a","seq":34,"manhole_ref":"CV4 - 0140 TO CV4 - 0135","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"sub_rate_override":null,"executed_by":"Own","subcontractor":"","planned_start":null,"planned_end":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}]};
 /* ENGINE: pure calculation logic (no DOM). Same code runs in the app and in tests.
-   Mirrors the Stage 1 SQL views and the GPR1A workbook formulas. */
+   Mirrors the Stage 1 SQL views and the GPR1A workbook formulas. v3 adds: subcontract rate,
+   layer-by-layer installation, activities log, S-curve, productivity trend, wastage alerts. */
 (function (root) {
   const N = (v) => (v === null || v === undefined || v === '' || isNaN(+v) ? 0 : +v);
   const live = (rows) => (rows || []).filter((r) => !r.deleted);
 
-  // ---- deterministic ids: the same day/run/trade always gets the same id, so
-  // two phones entering the same line merge instead of duplicating ----
+  // deterministic ids: the same day/run/trade always gets the same id, so
+  // two phones entering the same line merge instead of duplicating
   const ids = {
     report: (pid, date) => `${pid}_${date}`,
     progress: (rid, item) => `${rid}__${item}`,
     labour: (rid, item, trade) => `${rid}__${item}__${trade}`,
     material: (rid, item, mat) => `${rid}__${item}__${mat}`,
+    install: (rid, item, layer) => `${rid}__${item}__L${layer}`,
+    activity: (rid, item, act) => `${rid}__${item}__A_${act}`,
     uid: (p) => `${p}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`,
   };
 
-  // ---- take-off derivations (workbook A_TakeOff: G = layer x way, K = G x length/way) ----
+  // ---- rates: CONTRACT rate = what the client pays us (earned value).
+  //            SUBCONTRACT rate = what we pay a subcontractor (cost), only for runs executed by "Subcon". ----
+  const matchRate = (item, rateItems) => live(rateItems).find((r) => r.subtrade === item.subtrade && N(r.pipe_size) === N(item.pipe_size) && N(item.pipe_size) > 0);
   function rateFor(item, rateItems) {
     if (item.rate_override !== null && item.rate_override !== undefined && item.rate_override !== '') return N(item.rate_override);
-    const ri = live(rateItems).find((r) => r.subtrade === item.subtrade && N(r.pipe_size) === N(item.pipe_size) && N(item.pipe_size) > 0);
-    return ri ? N(ri.rate) : 0;
+    const ri = matchRate(item, rateItems); return ri ? N(ri.rate) : 0;
   }
+  function subRateFor(item, rateItems) {
+    if (item.sub_rate_override !== null && item.sub_rate_override !== undefined && item.sub_rate_override !== '') return N(item.sub_rate_override);
+    const ri = matchRate(item, rateItems); return ri ? N(ri.sub_rate) : 0;
+  }
+  const isSub = (item) => item.executed_by === 'Subcon';
+
+  // ---- take-off derivations (workbook A_TakeOff: G = layer x way, K = G x length/way) ----
   function derive(item, rateItems) {
     const total_pipes = N(item.no_layer || 1) * N(item.no_way);
     const overall = total_pipes * N(item.length_per_way);
-    return { total_pipes, overall, rate: rateFor(item, rateItems) };
+    return { total_pipes, overall, rate: rateFor(item, rateItems), sub_rate: subRateFor(item, rateItems) };
   }
   function dataCheck(item, rateItems) {
     const d = derive(item, rateItems);
     if (!N(item.pipe_size) || !N(item.no_way) || !N(item.length_per_way)) return 'MISSING DATA';
     if (!d.rate) return 'NO RATE';
+    if (isSub(item) && !d.sub_rate) return 'NO SUB RATE';
     return 'OK';
   }
 
-  // ---- norms (workbook A2_DuctSpacer): spacers/way = ROUNDUP((L-2*edge)/spacing + extra) ;
-  //      plugs = plugs_per_way x pipes ; sub-duct = pipes_with_subduct x L x lines ----
+  // ---- norms (workbook A2_DuctSpacer) ----
   function deriveNorms(item, project, materials) {
     const out = [];
     const size = N(item.pipe_size), L = N(item.length_per_way), pipes = N(item.no_layer || 1) * N(item.no_way);
@@ -101,6 +124,10 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
     return out;
   }
 
+  // ---- dates ----
+  const dn = (s) => { const [y, m, d] = String(s).slice(0, 10).split('-').map(Number); return Math.round(Date.UTC(y, m - 1, d) / 864e5); };
+  const ds = (n) => new Date(n * 864e5).toISOString().slice(0, 10);
+
   // ---- main report computation ----
   function compute(D, pid) {
     const proj = live(D.projects).find((p) => p.id === pid) || {};
@@ -112,13 +139,14 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
     const lab = live(D.daily_labour).filter(inRep);
     const mat = live(D.daily_material_usage).filter(inRep);
     const del = live(D.daily_delays).filter(inRep);
+    const inst = live(D.daily_install).filter(inRep);
     const trades = Object.fromEntries(live(D.labour_types).map((t) => [t.id, t]));
     const mats = Object.fromEntries(live(D.materials).map((m) => [m.id, m]));
     const reasons = Object.fromEntries(live(D.delay_reasons).map((r) => [r.id, r]));
     const norms = live(D.work_item_norms);
     const itemById = {};
 
-    // progress
+    // progress (+ layer-by-layer pipes installed)
     const progress = items.map((it) => {
       const d = derive(it, D.rate_items);
       const rows = prog.filter((p) => p.work_item_id === it.id);
@@ -126,9 +154,14 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
       const dates = rows.filter((p) => N(p.qty_done) > 0).map((p) => rById[p.report_id].report_date).sort();
       const pct = d.overall > 0 ? (100 * done) / d.overall : null;
       const status = d.overall > 0 && done >= d.overall - 1e-9 ? 'Completed' : done > 0 ? 'On Going' : 'Not Started';
-      const row = { item: it, overall: d.overall, total_pipes: d.total_pipes, rate: d.rate, done, pct, earned: done * d.rate,
-        balance: Math.max(0, d.overall - done), status, first_date: dates[0] || null, last_date: dates[dates.length - 1] || null,
-        check: dataCheck(it, D.rate_items) };
+      const layerSum = {}; inst.filter((x) => x.work_item_id === it.id).forEach((x) => (layerSum[x.layer_no] = (layerSum[x.layer_no] || 0) + N(x.pipes_done)));
+      const nl = Math.max(1, N(it.no_layer || 1));
+      const layers = Array.from({ length: nl }, (_, i) => ({ layer: i + 1, done: layerSum[i + 1] || 0, cap: N(it.no_way) }));
+      const pipes_done = layers.reduce((s, l) => s + l.done, 0);
+      const sub = isSub(it);
+      const row = { item: it, overall: d.overall, total_pipes: d.total_pipes, rate: d.rate, sub_rate: d.sub_rate, is_sub: sub, done, pct, earned: done * d.rate,
+        sub_cost: sub ? done * d.sub_rate : 0, balance: Math.max(0, d.overall - done), status, first_date: dates[0] || null, last_date: dates[dates.length - 1] || null,
+        check: dataCheck(it, D.rate_items), layers, pipes_done };
       itemById[it.id] = row; return row;
     });
 
@@ -148,7 +181,6 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
         output_per_mh: a.man_hours > 0 ? done / a.man_hours : null, actual_hrs_per_unit: actual, planned_hrs_per_unit: planned,
         productivity_pct: actual && planned ? (100 * planned) / actual : null };
     });
-    // by trade (all runs)
     const byTrade = {};
     productivity.forEach((r) => { const b = (byTrade[r.trade] = byTrade[r.trade] || { trade: r.trade, man_hours: 0, cost: 0 }); b.man_hours += r.man_hours; b.cost += r.labour_cost; });
 
@@ -171,26 +203,31 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
     const byMaterial = {};
     wastage.forEach((w) => { const b = (byMaterial[w.code] = byMaterial[w.code] || { code: w.code, material: w.material, unit: w.unit, used: 0, theo: 0, cost: 0, vcost: 0, allowed: w.allowed_pct });
       b.used += w.qty_used; b.theo += w.theoretical_qty; b.cost += w.material_cost; b.vcost += w.variance_cost; });
+    // wastage ALERTS: used more than standard + allowance (only where a standard exists)
+    const alerts = wastage.filter((w) => w.wastage_pct !== null && w.wastage_pct > w.allowed_pct + 1e-9)
+      .map((w) => ({ ...w, over_pct: w.wastage_pct - w.allowed_pct })).sort((a, b) => b.variance_cost - a.variance_cost);
 
-    // cost & profit per item
+    // cost & profit per item (own labour + material + subcontract)
     const labCostBy = {}, matCostBy = {};
     lab.forEach((l) => (labCostBy[l.work_item_id] = (labCostBy[l.work_item_id] || 0) + N(l.workers) * N(l.hours_each) * N(l.hourly_rate)));
     mat.forEach((m) => (matCostBy[m.work_item_id] = (matCostBy[m.work_item_id] || 0) + N(m.qty_used) * N(m.unit_cost)));
     const cost = progress.map((p) => {
-      const lc = labCostBy[p.item.id] || 0, mc = matCostBy[p.item.id] || 0, tc = lc + mc;
-      return { item: p.item, earned: p.earned, labour_cost: lc, material_cost: mc, total_cost: tc, profit: p.earned - tc,
+      const lc = labCostBy[p.item.id] || 0, mc = matCostBy[p.item.id] || 0, sc = p.sub_cost, tc = lc + mc + sc;
+      return { item: p.item, earned: p.earned, labour_cost: lc, material_cost: mc, sub_cost: sc, total_cost: tc, profit: p.earned - tc,
         margin_pct: p.earned > 0 ? (100 * (p.earned - tc)) / p.earned : null };
     });
 
     // daily summary
     const daily = reports.map((r) => {
       const pr = prog.filter((x) => x.report_id === r.id), lb = lab.filter((x) => x.report_id === r.id);
-      const mt = mat.filter((x) => x.report_id === r.id), dl = del.filter((x) => x.report_id === r.id);
-      return { date: r.report_date, weather: r.weather, metres: pr.reduce((s, x) => s + N(x.qty_done), 0),
-        earned: pr.reduce((s, x) => s + N(x.qty_done) * (itemById[x.work_item_id] ? itemById[x.work_item_id].rate : 0), 0),
+      const mt = mat.filter((x) => x.report_id === r.id), dl = del.filter((x) => x.report_id === r.id), ins = inst.filter((x) => x.report_id === r.id);
+      const rateOf = (id) => (itemById[id] ? itemById[id].rate : 0);
+      return { date: r.report_date, weather: r.weather, metres: pr.reduce((s, x) => s + N(x.qty_done), 0), pipes: ins.reduce((s, x) => s + N(x.pipes_done), 0),
+        earned: pr.reduce((s, x) => s + N(x.qty_done) * rateOf(x.work_item_id), 0),
         headcount: lb.reduce((s, x) => s + N(x.workers), 0), man_hours: lb.reduce((s, x) => s + N(x.workers) * N(x.hours_each), 0),
         labour_cost: lb.reduce((s, x) => s + N(x.workers) * N(x.hours_each) * N(x.hourly_rate), 0),
         material_cost: mt.reduce((s, x) => s + N(x.qty_used) * N(x.unit_cost), 0),
+        sub_cost: pr.reduce((s, x) => { const p = itemById[x.work_item_id]; return s + (p && p.is_sub ? N(x.qty_done) * p.sub_rate : 0); }, 0),
         delay_hours: dl.reduce((s, x) => s + N(x.hours_lost), 0) };
     }).sort((a, b) => (a.date < b.date ? 1 : -1));
 
@@ -217,15 +254,77 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
       return Object.values(g).map((a) => ({ ...a, pct: a.overall > 0 ? (100 * a.done) / a.overall : null })).sort((x, y) => (x.key > y.key ? 1 : -1)); };
     const totals = { runs: items.length, overall: totalOverall, done: totalDone, pct: totalOverall > 0 ? (100 * totalDone) / totalOverall : null,
       earned, retention, net_claim: earned - retention, labour_cost: cost.reduce((s, c) => s + c.labour_cost, 0), material_cost: cost.reduce((s, c) => s + c.material_cost, 0),
+      sub_cost: cost.reduce((s, c) => s + c.sub_cost, 0),
       total_cost: totalCost, profit: earned - totalCost, margin_pct: earned > 0 ? (100 * (earned - totalCost)) / earned : null,
-      contract_value: progress.reduce((s, p) => s + p.overall * p.rate, 0),
+      contract_value: progress.reduce((s, p) => s + p.overall * p.rate, 0), sub_value: progress.filter((p) => p.is_sub).reduce((s, p) => s + p.overall * p.sub_rate, 0),
       completed: progress.filter((p) => p.status === 'Completed').length, ongoing: progress.filter((p) => p.status === 'On Going').length,
-      notstarted: progress.filter((p) => p.status === 'Not Started').length, missing: progress.filter((p) => p.check !== 'OK').length };
-    return { progress, productivity, byTrade: Object.values(byTrade), wastage, byMaterial: Object.values(byMaterial), cost, daily, delays, stock,
+      notstarted: progress.filter((p) => p.status === 'Not Started').length, missing: progress.filter((p) => p.check !== 'OK').length,
+      alerts: alerts.length };
+    return { progress, productivity, byTrade: Object.values(byTrade), wastage, byMaterial: Object.values(byMaterial), alerts, cost, daily, delays, stock,
       bySize: group((p) => p.item.pipe_size && p.item.pipe_size + ' mm'), byZone: group((p) => p.item.zone), totals };
   }
 
-  const api = { N, live, ids, rateFor, derive, dataCheck, deriveNorms, compute };
+  // ---- S-CURVE: planned (from run planned dates, spread evenly by length) vs actual cumulative % of total length ----
+  function scurve(D, pid, today) {
+    const items = live(D.work_items).filter((i) => i.project_id === pid).map((i) => ({ i, o: derive(i, D.rate_items).overall })).filter((x) => x.o > 0);
+    const total = items.reduce((s, x) => s + x.o, 0);
+    const reps = live(D.daily_reports).filter((r) => r.project_id === pid), rById = Object.fromEntries(reps.map((r) => [r.id, r]));
+    const lines = live(D.daily_progress).filter((p) => rById[p.report_id]).map((p) => ({ d: dn(rById[p.report_id].report_date), q: N(p.qty_done) }));
+    const planned = items.filter((x) => x.i.planned_start && x.i.planned_end).map((x) => ({ s: dn(x.i.planned_start), e: Math.max(dn(x.i.planned_start), dn(x.i.planned_end)), o: x.o }));
+    if (!total || (!planned.length && !lines.length)) return { points: [], hasPlan: false, total };
+    const t = dn(today || new Date().toISOString().slice(0, 10)), lastAct = lines.length ? Math.max(...lines.map((l) => l.d)) : null;
+    let start = Math.min(...planned.map((p) => p.s), ...lines.map((l) => l.d)), end = Math.max(...planned.map((p) => p.e), ...lines.map((l) => l.d), t);
+    const step = Math.max(1, Math.ceil((end - start + 1) / 120)), pts = [];
+    for (let d = start; ; d += step) {
+      const day = Math.min(d, end);
+      const pl = planned.reduce((s, p) => s + p.o * Math.min(1, Math.max(0, (day - p.s + 1) / (p.e - p.s + 1))), 0);
+      const ac = lines.filter((l) => l.d <= day).reduce((s, l) => s + l.q, 0);
+      pts.push({ date: ds(day), planned: planned.length ? (100 * pl) / total : null, actual: day <= Math.max(t, lastAct === null ? -1 : lastAct) ? (100 * ac) / total : null });
+      if (day >= end) break;
+    }
+    return { points: pts, hasPlan: planned.length > 0, total };
+  }
+  // plan every run in order, spread across [startDate,endDate] in proportion to length
+  function autoPlan(items, rateItems, startDate, endDate) {
+    const days = dn(endDate) - dn(startDate) + 1; if (days < 1) return [];
+    const w = items.map((i) => derive(i, rateItems).overall || 1), tot = w.reduce((a, b) => a + b, 0); let cum = 0;
+    return items.map((i, k) => { const a = Math.floor((cum / tot) * days); cum += w[k]; const b = Math.max(a, Math.ceil((cum / tot) * days) - 1);
+      return { id: i.id, planned_start: ds(dn(startDate) + a), planned_end: ds(dn(startDate) + Math.min(b, days - 1)) }; });
+  }
+
+  // ---- productivity trend: metres per man-hour each day + 7-day average ----
+  function trend(res) {
+    const days = res.daily.slice().sort((a, b) => (a.date > b.date ? 1 : -1)).filter((d) => d.man_hours > 0);
+    const vals = days.map((d) => d.metres / d.man_hours);
+    const ma = vals.map((_, i) => { const w = vals.slice(Math.max(0, i - 6), i + 1); return w.reduce((a, b) => a + b, 0) / w.length; });
+    return { labels: days.map((d) => d.date), daily: vals, avg7: ma };
+  }
+
+  // ---- activity log: one entry per run per day, with cumulative layer status ----
+  function log(D, pid) {
+    const reps = live(D.daily_reports).filter((r) => r.project_id === pid).sort((a, b) => (a.report_date > b.report_date ? 1 : -1));
+    const items = Object.fromEntries(live(D.work_items).map((i) => [i.id, i]));
+    const acts = Object.fromEntries(live(D.activities).map((a) => [a.id, a])), trades = Object.fromEntries(live(D.labour_types).map((t) => [t.id, t]));
+    const cum = {}, out = [];
+    reps.forEach((r) => {
+      const ofR = (t) => live(D[t]).filter((x) => x.report_id === r.id);
+      const ids_ = new Set(); ['daily_progress', 'daily_labour', 'daily_install', 'daily_activities', 'daily_material_usage', 'daily_delays'].forEach((t) => ofR(t).forEach((x) => x.work_item_id && ids_.add(x.work_item_id)));
+      [...ids_].filter((id) => items[id]).sort((a, b) => N(items[a].seq) - N(items[b].seq)).forEach((id) => {
+        const it = items[id], L = N(it.length_per_way), cap = N(it.no_way);
+        const layers = ofR('daily_install').filter((x) => x.work_item_id === id).sort((a, b) => N(a.layer_no) - N(b.layer_no));
+        layers.forEach((x) => { const k = id + '|' + x.layer_no; cum[k] = (cum[k] || 0) + N(x.pipes_done); });
+        const pipes = layers.reduce((s, x) => s + N(x.pipes_done), 0);
+        const metres = ofR('daily_progress').filter((x) => x.work_item_id === id).reduce((s, x) => s + N(x.qty_done), 0);
+        const crew = ofR('daily_labour').filter((x) => x.work_item_id === id).map((x) => `${x.workers} ${(trades[x.labour_type_id] || {}).trade || ''}`);
+        out.push({ date: r.report_date, item: it, activity_ids: ofR('daily_activities').filter((x) => x.work_item_id === id).map((x) => x.activity_id), activities: ofR('daily_activities').filter((x) => x.work_item_id === id).map((x) => (acts[x.activity_id] || {}).name).filter(Boolean),
+          layers: layers.map((x) => ({ layer: N(x.layer_no), today: N(x.pipes_done), cum: cum[id + '|' + x.layer_no], cap })), layersText: layers.map((x) => `L${x.layer_no} +${N(x.pipes_done)} (${cum[id + '|' + x.layer_no]}/${cap})`).join('; '),
+          pipes, metres, crew, crewText: crew.join(', '), delay_h: ofR('daily_delays').filter((x) => x.work_item_id === id).reduce((s, x) => s + N(x.hours_lost), 0), length_per_way: L });
+      });
+    });
+    return out;
+  }
+
+  const api = { N, live, ids, rateFor, subRateFor, isSub, derive, dataCheck, deriveNorms, compute, scurve, autoPlan, trend, log, dn, ds };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Engine = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -233,8 +332,8 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
    Pure logic: the store and fetch are injected so it can be tested without a browser. */
 (function (root) {
   // parents before children
-  const TABLES = ['projects', 'rate_items', 'labour_types', 'materials', 'delay_reasons', 'work_items', 'work_item_norms',
-    'daily_reports', 'daily_progress', 'daily_labour', 'daily_material_usage', 'daily_delays', 'material_receipts'];
+  const TABLES = ['projects', 'rate_items', 'labour_types', 'materials', 'delay_reasons', 'activities', 'work_items', 'work_item_norms',
+    'daily_reports', 'daily_progress', 'daily_install', 'daily_activities', 'daily_labour', 'daily_material_usage', 'daily_delays', 'material_receipts'];
   const LOCAL_ONLY = ['_dirty', 'server_ts'];
   const strip = (r) => { const o = { ...r }; LOCAL_ONLY.forEach((k) => delete o[k]); return o; };
   const base = (cfg) => cfg.url.replace(/\/+$/, '');
@@ -298,13 +397,129 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Sync = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
-/* APP: UI + on-device database (IndexedDB) + sync controller */
+/* CHARTS: tiny dependency-free SVG line chart (works offline, prints well) */
+(function (root) {
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const fmtDate = (s) => { const p = String(s).split('-'); return p.length === 3 ? +p[2] + ' ' + MON[+p[1] - 1] : s; };
+  function niceMax(v) { if (v <= 0) return 1; const e = Math.pow(10, Math.floor(Math.log10(v))), f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * e; }
+  // o: {title, labels:[date], series:[{name,vals:[num|null],color,dash}], yMax?, unit?}
+  function lineChart(o) {
+    const W = 360, H = 200, ml = 40, mr = 10, mt = 12, mb = 26, pw = W - ml - mr, ph = H - mt - mb, n = o.labels.length;
+    if (!n) return '<div class="mut">No data yet.</div>';
+    const all = o.series.flatMap((s) => s.vals.filter((v) => v !== null && v !== undefined));
+    const ymax = o.yMax || niceMax(Math.max(0.0001, ...all)), unit = o.unit || '';
+    const X = (i) => ml + (n === 1 ? pw / 2 : (i / (n - 1)) * pw), Y = (v) => mt + ph - (Math.min(v, ymax) / ymax) * ph;
+    let g = '';
+    for (let k = 0; k <= 4; k++) { const v = (ymax * k) / 4, y = Y(v); g += `<line x1="${ml}" x2="${W - mr}" y1="${y}" y2="${y}" stroke="#9aa8a2" stroke-opacity=".35"/><text x="${ml - 5}" y="${y + 4}" text-anchor="end" font-size="10" fill="#7a8a84">${Number(v.toFixed(v < 10 ? 1 : 0))}${unit}</text>`; }
+    [0, Math.floor((n - 1) / 2), n - 1].filter((v, i, a) => a.indexOf(v) === i).forEach((i) => { g += `<text x="${X(i)}" y="${H - 8}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}" font-size="10" fill="#7a8a84">${esc(fmtDate(o.labels[i]))}</text>`; });
+    o.series.forEach((s) => {
+      let d = '', pen = false, last = null;
+      s.vals.forEach((v, i) => { if (v === null || v === undefined) { pen = false; return; } d += (pen ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1) + ' '; pen = true; last = i; });
+      g += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.2" stroke-linejoin="round" ${s.dash ? 'stroke-dasharray="5 4"' : ''}/>`;
+      if (last !== null) g += `<circle cx="${X(last)}" cy="${Y(s.vals[last])}" r="3.5" fill="${s.color}"/>`;
+    });
+    const legend = o.series.map((s) => `<span style="display:inline-flex;align-items:center;gap:5px;margin-right:12px"><i style="width:14px;height:0;border-top:3px ${s.dash ? 'dashed' : 'solid'} ${s.color};display:inline-block"></i>${esc(s.name)}</span>`).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.title || 'chart')}">${g}</svg><div class="mut" style="margin-top:2px">${legend}</div>`;
+  }
+  const api = { lineChart, fmtDate }; if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Charts = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* EXPORT: real .xlsx writer (no libraries, works offline) + WhatsApp text. Pure functions. */
+(function (root) {
+  const N = (v) => (v === null || v === undefined || v === '' || isNaN(+v) ? 0 : +v);
+  const enc = new TextEncoder();
+  const CRC = (() => { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = (b) => { let c = 0xffffffff; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+  const u16 = (n) => [n & 255, (n >> 8) & 255], u32 = (n) => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >>> 24) & 255];
+  function zipStore(files) {
+    const parts = [], central = []; let off = 0;
+    files.forEach((f) => {
+      const name = enc.encode(f.name), data = typeof f.data === 'string' ? enc.encode(f.data) : f.data, crc = crc32(data);
+      const lh = Uint8Array.from([...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(name.length), ...u16(0), ...name]);
+      parts.push(lh, data);
+      central.push(Uint8Array.from([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(name.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off), ...name]));
+      off += lh.length + data.length;
+    });
+    const cdSize = central.reduce((s, c) => s + c.length, 0);
+    const eocd = Uint8Array.from([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length), ...u32(cdSize), ...u32(off), ...u16(0)]);
+    const all = [...parts, ...central, eocd], out = new Uint8Array(all.reduce((s, p) => s + p.length, 0)); let p = 0; all.forEach((a) => { out.set(a, p); p += a.length; }); return out;
+  }
+  const xe = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '');
+  const col = (i) => { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+  function sheetXml(rows) {
+    const widths = []; rows.forEach((r) => r.forEach((c, i) => { widths[i] = Math.min(48, Math.max(widths[i] || 8, String(c === null || c === undefined ? '' : c).length + 2)); }));
+    const data = rows.map((r, ri) => `<row r="${ri + 1}">${r.map((c, ci) => { const ref = col(ci) + (ri + 1), st = ri === 0 ? ' s="1"' : '';
+      if (c === null || c === undefined || c === '') return `<c r="${ref}"${st}/>`;
+      if (typeof c === 'number' && isFinite(c)) return `<c r="${ref}"${st}><v>${Math.round(c * 1e6) / 1e6}</v></c>`;
+      return `<c r="${ref}" t="inlineStr"${st}><is><t xml:space="preserve">${xe(c)}</t></is></c>`; }).join('')}</row>`).join('');
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${data}</sheetData></worksheet>`;
+  }
+  // sheets: [{name, rows:[[header...],[...]]}]
+  function buildXlsx(sheets) {
+    const names = sheets.map((s, i) => xe(s.name.replace(/[\\/?*\[\]:]/g, ' ').slice(0, 31)) || 'Sheet' + (i + 1));
+    const files = [
+      { name: '[Content_Types].xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>` },
+      { name: '_rels/.rels', data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+      { name: 'xl/workbook.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${names.map((n, i) => `<sheet name="${n}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')}</sheets></workbook>` },
+      { name: 'xl/_rels/workbook.xml.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>` },
+      { name: 'xl/styles.xml', data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0F5C4D"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>' },
+      ...sheets.map((s, i) => ({ name: `xl/worksheets/sheet${i + 1}.xml`, data: sheetXml(s.rows) })),
+    ];
+    return zipStore(files);
+  }
+
+  const r2 = (v) => (v === null || v === undefined ? '' : Math.round(v * 100) / 100);
+  // all report tables as sheets, straight from the engine results
+  function reportSheets(R, log, meta) {
+    const t = R.totals, cur = meta.currency || 'RM', it = (x) => (x ? x.manhole_ref : '');
+    return [
+      { name: 'Summary', rows: [['Item', 'Value'], ['Project', meta.project], ['Report generated', meta.generated], ['Overall progress %', r2(t.pct)], ['Length done (m)', r2(t.done)], ['Total length (m)', r2(t.overall)],
+        [`Earned value (${cur}, contract rate)`, r2(t.earned)], [`Retention held (${cur})`, r2(t.retention)], [`Net claimable (${cur})`, r2(t.net_claim)], [`Labour cost (${cur})`, r2(t.labour_cost)], [`Material cost (${cur})`, r2(t.material_cost)],
+        [`Subcontract cost (${cur}, subcontract rate)`, r2(t.sub_cost)], [`Total cost (${cur})`, r2(t.total_cost)], [`Profit to date (${cur})`, r2(t.profit)], ['Margin %', r2(t.margin_pct)], [`Contract value of take-off (${cur})`, r2(t.contract_value)],
+        ['Runs completed', t.completed], ['Runs on going', t.ongoing], ['Runs not started', t.notstarted], ['Material wastage alerts', t.alerts]] },
+      { name: 'Progress', rows: [['No', 'Run', 'Zone', 'Size mm', 'Layers', 'Ways', 'Length/way m', 'Total length m', 'Done m', 'Progress %', 'Pipes done', 'Status', 'Executed by', 'Subcontractor', 'Contract rate', 'Subcontract rate', 'Earned', 'Last worked'],
+        ...R.progress.map((p) => [p.item.seq, p.item.manhole_ref, p.item.zone, p.item.pipe_size || '', p.item.no_layer || '', p.item.no_way || '', p.item.length_per_way || '', r2(p.overall), r2(p.done), r2(p.pct), p.pipes_done, p.status, p.is_sub ? 'Subcon' : 'Own', p.item.subcontractor || '', r2(p.rate), p.is_sub ? r2(p.sub_rate) : '', r2(p.earned), p.last_date || ''])] },
+      { name: 'Daily log', rows: [['Date', 'Run', 'Zone', 'Activities', 'Layer progress', 'Pipes today', 'Metres today', 'Crew', 'Delay hours'],
+        ...log.map((l) => [l.date, l.item.manhole_ref, l.item.zone, l.activities.join(', '), l.layersText, l.pipes || '', r2(l.metres) || '', l.crewText, l.delay_h || ''])] },
+      { name: 'Productivity', rows: [['Run', 'Trade', 'Man-hours', 'Done m', 'm per man-hour', 'Hours per m', 'Planned hrs/m', 'Productivity %'],
+        ...R.productivity.map((x) => [it(x.item), x.trade, r2(x.man_hours), r2(x.qty_done), r2(x.output_per_mh), r2(x.actual_hrs_per_unit), r2(x.planned_hrs_per_unit), r2(x.productivity_pct)])] },
+      { name: 'Material', rows: [['Run', 'Code', 'Material', 'Unit', 'Used', 'Standard', 'Variance', 'Wastage %', 'Allowed %', `Variance cost ${cur}`, 'Over allowance?'],
+        ...R.wastage.map((w) => [it(w.item), w.code, w.material, w.unit, r2(w.qty_used), r2(w.theoretical_qty), r2(w.variance_qty), r2(w.wastage_pct), r2(w.allowed_pct), r2(w.variance_cost), w.wastage_pct !== null && w.wastage_pct > w.allowed_pct ? 'YES' : ''])] },
+      { name: 'Cost & profit', rows: [['Run', `Earned ${cur}`, `Labour ${cur}`, `Material ${cur}`, `Subcontract ${cur}`, `Total cost ${cur}`, `Profit ${cur}`, 'Margin %'],
+        ...R.cost.filter((c) => c.earned || c.total_cost).map((c) => [it(c.item), r2(c.earned), r2(c.labour_cost), r2(c.material_cost), r2(c.sub_cost), r2(c.total_cost), r2(c.profit), r2(c.margin_pct)])] },
+      { name: 'Daily summary', rows: [['Date', 'Weather', 'Metres', 'Pipes', `Earned ${cur}`, 'Workers', 'Man-hours', `Labour ${cur}`, `Material ${cur}`, `Subcontract ${cur}`, 'Delay hours'],
+        ...R.daily.slice().reverse().map((d) => [d.date, d.weather, r2(d.metres), d.pipes, r2(d.earned), d.headcount, r2(d.man_hours), r2(d.labour_cost), r2(d.material_cost), r2(d.sub_cost), r2(d.delay_hours)])] },
+      { name: 'Delays', rows: [['Category', 'Reason', 'Times', 'Hours lost'], ...R.delays.map((d) => [d.category, d.reason, d.occurrences, r2(d.hours_lost)])] },
+      { name: 'Stock', rows: [['Code', 'Material', 'Unit', 'Received', 'Used', 'Balance'], ...R.stock.map((s) => [s.code, s.name, s.unit, r2(s.received), r2(s.used), r2(s.balance)])] },
+    ];
+  }
+
+  // WhatsApp message for one day (progress only - no cost figures, safe to share with the client/consultant)
+  function waText(R, log, date, meta) {
+    const d = R.daily.find((x) => x.date === date), rows = log.filter((l) => l.date === date), t = R.totals;
+    const f = (n, k) => Number(n || 0).toLocaleString('en-MY', { maximumFractionDigits: k === undefined ? 1 : k });
+    const L = [`*${meta.project} - Daily report ${date}*`];
+    if (d && d.weather) L.push(`Weather: ${d.weather}`);
+    if (!rows.length) L.push('No work recorded for this date.');
+    else {
+      L.push(`Installed today: ${f(d.metres)} m${d.pipes ? ' (' + d.pipes + ' pipes)' : ''}`, `Manpower: ${f(d.headcount, 0)} workers, ${f(d.man_hours, 0)} man-hours`);
+      if (d.delay_hours) L.push(`Delay: ${f(d.delay_hours)} h`);
+      L.push('', '*Work done*'); rows.forEach((l) => L.push(`- ${l.item.manhole_ref} (${l.item.pipe_size || '?'}mm): ${l.activities.join(', ') || 'work'}${l.layersText ? ' - ' + l.layersText : l.metres ? ' - ' + f(l.metres) + ' m' : ''}`));
+    }
+    L.push('', `Overall progress: ${t.pct === null ? '-' : f(t.pct)}% (${f(t.done, 0)} / ${f(t.overall, 0)} m)`, `Runs: ${t.completed} done, ${t.ongoing} on going, ${t.notstarted} not started`);
+    return L.join('\n');
+  }
+  const api = { buildXlsx, zipStore, reportSheets, waText, crc32 }; if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Export = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* APP v3: UI + on-device database (IndexedDB) + sync controller */
 (function () {
   const E = Engine, N = E.N, TABLES = Sync.TABLES;
   const PID = SEED.projects[0].id;
   const MEM = {}; TABLES.forEach((t) => (MEM[t] = new Map()));
-  const META = {}; let IDB = null, ver = 0, cache = null, cacheVer = -1;
-  const S = { tab: 'entry', rep: 'overview', date: today(), edit: null, picker: null, form: null, q: '', runFilter: 'all', sync: { state: 'idle', msg: '', running: false } };
+  const META = {}; let IDB = null, ver = 0, cache = null, cacheVer = -1, logCache = null, logVer = -1, swReg = null;
+  const S = { tab: 'entry', rep: 'dash', date: today(), edit: null, picker: null, form: null, wa: null, showDone: false, q: '', runFilter: 'all', sync: { state: 'idle', msg: '', running: false } };
 
   function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   const nowIso = () => new Date().toISOString();
@@ -313,14 +528,15 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
   const live = (t) => [...MEM[t].values()].filter((r) => !r.deleted && (r.project_id === PID || t === 'projects'));
   const proj = () => MEM.projects.get(PID);
   const $ = (s, r) => (r || document).querySelector(s);
+  const niceDate = (s) => Charts.fmtDate(s);
 
   // ---------------- on-device database ----------------
   function idbReq(r) { return new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
   async function initStore() {
     if (typeof indexedDB !== 'undefined') {
       IDB = await new Promise((res, rej) => {
-        const o = indexedDB.open('qs-site', 1);
-        o.onupgradeneeded = () => { TABLES.forEach((t) => o.result.createObjectStore(t, { keyPath: 'id' })); o.result.createObjectStore('meta', { keyPath: 'k' }); };
+        const o = indexedDB.open('qs-site', 2);   // v2: adds the Stage 3 tables; existing data is kept
+        o.onupgradeneeded = () => { TABLES.forEach((t) => { if (!o.result.objectStoreNames.contains(t)) o.result.createObjectStore(t, { keyPath: 'id' }); }); if (!o.result.objectStoreNames.contains('meta')) o.result.createObjectStore('meta', { keyPath: 'k' }); };
         o.onsuccess = () => res(o.result); o.onerror = () => rej(o.error);
       }).catch(() => null);
     }
@@ -344,12 +560,17 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
   const pending = () => TABLES.reduce((n, t) => n + [...MEM[t].values()].filter((r) => r._dirty).length, 0);
   function data() { const d = {}; TABLES.forEach((t) => (d[t] = [...MEM[t].values()])); return d; }
   function R() { if (cacheVer !== ver) { cache = E.compute(data(), PID); cacheVer = ver; } return cache; }
+  function LG() { if (logVer !== ver) { logCache = E.log(data(), PID); logVer = ver; } return logCache; }
   const pRow = (id) => R().progress.find((p) => p.item.id === id);
 
+  // first run: load starter data. Upgrades: add starter rows only for tables that did not exist before (e.g. activities).
   async function seedIfEmpty() {
-    if (MEM.projects.size) return;
-    TABLES.forEach((t) => (SEED[t] || []).forEach((r) => { MEM[t].set(r.id, { ...r, _dirty: 1 }); }));
-    TABLES.forEach((t) => persist(t, [...MEM[t].values()])); regenAllNorms(); ver++;
+    TABLES.forEach((t) => {
+      if (META['seeded_' + t]) return;
+      if (MEM[t].size === 0) (SEED[t] || []).forEach((r) => { const row = { ...r, _dirty: 1 }; MEM[t].set(r.id, row); persist(t, [row]); });
+      setMeta('seeded_' + t, 1);
+    });
+    if (!live('work_item_norms').length) regenAllNorms(); ver++;
   }
   function regenNorms(item) {
     const want = E.deriveNorms(item, proj(), live('materials')), keep = new Set();
@@ -365,12 +586,41 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
     if (!MEM.daily_reports.get(id) || MEM.daily_reports.get(id).deleted) put('daily_reports', { ...(MEM.daily_reports.get(id) || {}), id, project_id: PID, report_date: date, weather: '', rain_hours: 0, notes: '', entered_by: META.user || '', deleted: false });
     return id;
   }
-  function setProgress(rid, itemId, qty) {
-    const pr = pRow(itemId), id = E.ids.progress(rid, itemId), ex = MEM.daily_progress.get(id), cur = ex && !ex.deleted ? N(ex.qty_done) : 0;
-    if (pr.overall > 0 && pr.done - cur + qty > pr.overall * 1.1 + 1e-9) { toast('Over 110% of run length (' + fmt(pr.overall, 1) + ' m) - check quantity'); return false; }
-    if (qty <= 0) { if (ex && !ex.deleted) del('daily_progress', id); return true; }
-    put('daily_progress', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, qty_done: qty, remarks: (ex && ex.remarks) || '', deleted: false }); return true;
+  function writeProgress(rid, itemId, qty) {
+    const id = E.ids.progress(rid, itemId), ex = MEM.daily_progress.get(id);
+    if (qty <= 0) { if (ex && !ex.deleted) del('daily_progress', id); return; }
+    put('daily_progress', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, qty_done: +qty.toFixed(3), remarks: (ex && ex.remarks) || '', deleted: false });
   }
+  function setProgress(rid, itemId, qty) {   // manual metres (runs without layer data); guarded at 110% of run length
+    const pr = pRow(itemId), ex = MEM.daily_progress.get(E.ids.progress(rid, itemId)), cur = ex && !ex.deleted ? N(ex.qty_done) : 0;
+    if (pr.overall > 0 && pr.done - cur + qty > pr.overall * 1.1 + 1e-9) { toast('Over 110% of run length (' + fmt(pr.overall, 1) + ' m) - check quantity'); return false; }
+    writeProgress(rid, itemId, qty); return true;
+  }
+  const actsList = () => live('activities').sort((a, b) => N(a.seq) - N(b.seq));
+  const todayActs = (rid, itemId) => new Set(live('daily_activities').filter((l) => l.report_id === rid && l.work_item_id === itemId).map((l) => l.activity_id));
+  function setActivity(rid, itemId, actId, on) {
+    const id = E.ids.activity(rid, itemId, actId), ex = MEM.daily_activities.get(id), alive = ex && !ex.deleted;
+    if (on && !alive) put('daily_activities', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, activity_id: actId, deleted: false });
+    if (!on && alive) del('daily_activities', id);
+  }
+  // layer-by-layer installation: pipes installed today in one layer; metres are derived (pipes x length/way)
+  const installToday = (rid, itemId, layer) => { const x = MEM.daily_install.get(E.ids.install(rid, itemId, layer)); return x && !x.deleted ? N(x.pipes_done) : 0; };
+  function setInstall(rid, itemId, layer, n) {
+    const p = pRow(itemId), it = p.item, cap = N(it.no_way), cur = installToday(rid, itemId, layer), before = (p.layers.find((l) => l.layer === layer) || { done: 0 }).done - cur;
+    n = Math.max(0, Math.round(n));
+    if (before + n > cap) { toast(`Layer ${layer} has only ${cap} pipes (${before} already installed)`); return false; }
+    const id = E.ids.install(rid, itemId, layer), ex = MEM.daily_install.get(id);
+    if (n <= 0) { if (ex && !ex.deleted) del('daily_install', id); }
+    else put('daily_install', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, layer_no: layer, pipes_done: n, deleted: false });
+    syncInstallMetres(rid, itemId);
+    if (n > 0) { const ia = actsList().find((a) => a.kind === 'install'); if (ia) setActivity(rid, itemId, ia.id, true); }
+    return true;
+  }
+  function syncInstallMetres(rid, itemId) {
+    const it = MEM.work_items.get(itemId), pipes = live('daily_install').filter((x) => x.report_id === rid && x.work_item_id === itemId).reduce((s, x) => s + N(x.pipes_done), 0);
+    writeProgress(rid, itemId, pipes * N(it.length_per_way));
+  }
+  function recalcInstallMetres(itemId) { new Set(live('daily_install').filter((x) => x.work_item_id === itemId).map((x) => x.report_id)).forEach((rid) => syncInstallMetres(rid, itemId)); }
   function setLabour(rid, itemId, tradeId, workers, hours) {
     const id = E.ids.labour(rid, itemId, tradeId), ex = MEM.daily_labour.get(id), alive = ex && !ex.deleted;
     if (workers <= 0) { if (alive) del('daily_labour', id); return; }
@@ -389,6 +639,19 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
     for (const r of reps) { const l = linesOf('daily_labour', r.id, itemId); if (l.length) return { date: r.report_date, lines: l }; }
     return null;
   }
+  const lastEntry = (itemId, before) => LG().filter((l) => l.item.id === itemId && l.date < before).pop();
+  // "continue from yesterday": copy the same activities and crew; quantities start empty
+  function continueFrom(rid, itemId, date) {
+    const le = lastEntry(itemId, date), lc = lastCrew(itemId, date);
+    if (le) le.activity_ids.forEach((a) => setActivity(rid, itemId, a, true));
+    if (lc && !linesOf('daily_labour', rid, itemId).length) lc.lines.forEach((l) => setLabour(rid, itemId, l.labour_type_id, l.workers, l.hours_each));
+  }
+  function continueCandidates(date) {
+    const inToday = new Set(LG().filter((l) => l.date === date).map((l) => l.item.id)), last = {};
+    LG().filter((l) => l.date < date).forEach((l) => { last[l.item.id] = l; });
+    return Object.values(last).filter((l) => !inToday.has(l.item.id) && E.dn(date) - E.dn(l.date) <= 7 && pRow(l.item.id) && pRow(l.item.id).status !== 'Completed')
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : E.N(a.item.seq) - E.N(b.item.seq))).slice(0, 8);
+  }
 
   // ---------------- sync controller ----------------
   let syncTimer = null;
@@ -403,25 +666,25 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
       cfg.project_id = cfg.project_id || PID;
       const res = await Sync.syncAll({ cfg, store, fetch: (u, o) => fetch(u, o), onToken: async (c) => setMeta('cfg', { ...c }) });
       setMeta('lastSync', nowIso()); S.sync.state = 'ok'; S.sync.msg = `pulled ${res.pulled}, pushed ${res.pushed}`;
-      if (res.pulled) { ver++; regenCheck(); render(); }
+      if (res.pulled) { ver++; render(); }
     } catch (e) { S.sync.state = 'err'; S.sync.msg = String(e.message || e); }
     S.sync.running = false; renderHeader(); if (S.tab === 'setup' && !S.form) render();
   }
-  function regenCheck() { /* norms are synced rows; nothing to do */ }
   window.addEventListener('online', () => doSync(false));
   document.addEventListener('visibilitychange', () => { if (!document.hidden) doSync(false); });
   setInterval(() => doSync(false), 60000);
 
   // ---------------- UI helpers ----------------
   let toastT = null;
-  function toast(m) { let t = $('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 3200); }
+  function toast(m) { let t = $('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 3500); }
   const stCls = (s) => (s === 'Completed' ? 'g' : s === 'On Going' ? '' : 'w');
-  const bar = (p) => `<div class="bar"><i style="width:${Math.min(100, Math.max(0, N(p)))}%"></i></div>`;
+  const bar = (p, c) => `<div class="bar"><i style="width:${Math.min(100, Math.max(0, N(p)))}%;${c ? 'background:' + c : ''}"></i></div>`;
   function tbl(head, rows, nums) {
     nums = nums || [];
     return `<div class="card scroll"><table><tr>${head.map((x, i) => `<th class="${nums.includes(i) ? 'n' : ''}">${h(x)}</th>`).join('')}</tr>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${nums.includes(i) ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${head.length}" class="mut">No data yet - enter a daily report first.</td></tr>`}</table></div>`;
   }
   const itemLabel = (it) => h(it.manhole_ref);
+  const crewTxt = (rid, id) => linesOf('daily_labour', rid, id).map((c) => `${c.workers} ${h((MEM.labour_types.get(c.labour_type_id) || {}).trade)}`).join(', ');
 
   // ---------------- screens ----------------
   function renderHeader() {
@@ -431,37 +694,44 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
   }
   function vEntry() {
     const rid = E.ids.report(PID, S.date), rep = MEM.daily_reports.get(rid), r = R();
-    const ids = new Set(); ['daily_progress', 'daily_labour', 'daily_material_usage', 'daily_delays'].forEach((t) => live(t).filter((l) => l.report_id === rid && l.work_item_id).forEach((l) => ids.add(l.work_item_id)));
-    const day = r.daily.find((d) => d.date === S.date) || { metres: 0, headcount: 0, man_hours: 0, labour_cost: 0, material_cost: 0, delay_hours: 0, earned: 0 };
+    const ids = new Set(); ['daily_progress', 'daily_labour', 'daily_material_usage', 'daily_delays', 'daily_install', 'daily_activities'].forEach((t) => live(t).filter((l) => l.report_id === rid && l.work_item_id).forEach((l) => ids.add(l.work_item_id)));
+    const day = r.daily.find((d) => d.date === S.date) || { metres: 0, pipes: 0, headcount: 0, man_hours: 0, labour_cost: 0, material_cost: 0, sub_cost: 0, delay_hours: 0, earned: 0 };
     const cards = [...ids].map((id) => pRow(id)).filter(Boolean).sort((a, b) => N(a.item.seq) - N(b.item.seq)).map((p) => {
-      const today_m = N((MEM.daily_progress.get(E.ids.progress(rid, p.item.id)) || {}).qty_done), crew = linesOf('daily_labour', rid, p.item.id);
-      const crewTxt = crew.map((c) => `${c.workers} ${h((MEM.labour_types.get(c.labour_type_id) || {}).trade)}`).join(', ');
+      const le = LG().find((l) => l.date === S.date && l.item.id === p.item.id) || { activities: [], layersText: '', metres: 0 };
       return `<div class="card" data-act="edit" data-id="${p.item.id}"><div class="row"><h3 class="sp">${itemLabel(p.item)}</h3><span class="st ${stCls(p.status)}">${p.status}</span></div>
-        <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm' : 'size ?'}</div>
-        <div class="row" style="margin-top:6px"><b>${fmt(today_m, 1)} m today</b><span class="sp"></span><span class="mut">${p.pct === null ? 'no length' : fmt(p.pct, 1) + '% done'}</span></div>${p.pct !== null ? bar(p.pct) : ''}
-        <div class="mut" style="margin-top:4px">${crewTxt || 'No crew entered'}</div></div>`;
+        <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm' : 'size ?'}${p.is_sub ? ' · Subcon ' + h(p.item.subcontractor) : ''}</div>
+        <div style="margin-top:6px"><b>${le.activities.map(h).join(' + ') || 'No activity chosen'}</b></div>
+        <div class="row" style="margin-top:4px"><span class="sp mut">${h(le.layersText) || (le.metres ? fmt(le.metres, 1) + ' m' : '')}</span><b>${le.metres ? fmt(le.metres, 1) + ' m' : ''}</b></div>
+        <div class="row" style="margin-top:4px"><span class="mut sp">Total ${p.pct === null ? 'no length' : fmt(p.pct, 1) + '%'}${p.pipes_done ? ' · ' + p.pipes_done + ' pipes' : ''}</span></div>${p.pct !== null ? bar(p.pct) : ''}
+        <div class="mut" style="margin-top:4px">Crew: ${crewTxt(rid, p.item.id) || 'not entered'}</div></div>`;
     }).join('');
-    return `<div class="card"><div class="row"><div class="sp"><label>Date</label><input type="date" data-bind="date" value="${S.date}"></div>
-      <div class="sp"><label>Weather</label><select data-bind="weather">${['', 'Sunny', 'Cloudy', 'Light rain', 'Heavy rain'].map((w) => `<option ${rep && rep.weather === w ? 'selected' : ''}>${w}</option>`).join('')}</select></div>
-      <div style="width:84px"><label>Rain hrs</label><input type="number" inputmode="decimal" data-bind="rain" value="${rep ? N(rep.rain_hours) : 0}"></div></div></div>
-      <div class="kpis"><div class="kpi"><b>${fmt(day.metres, 1)} m</b><span>Installed today</span></div><div class="kpi"><b>RM ${fmt(day.earned)}</b><span>Earned today</span></div>
-      <div class="kpi"><b>${fmt(day.headcount)} / ${fmt(day.man_hours)} h</b><span>Workers / man-hours</span></div><div class="kpi"><b>RM ${fmt(day.labour_cost + day.material_cost)}</b><span>Cost today</span></div></div>
+    const cont = continueCandidates(S.date).map((l) => { const p = pRow(l.item.id);
+      return `<div class="card" style="border-color:var(--pri)"><div class="row"><div class="sp"><b>${itemLabel(l.item)}</b><div class="mut">${niceDate(l.date)}: ${l.activities.map(h).join(' + ') || 'work'}${l.layersText ? ' · ' + h(l.layersText) : ''}</div><div class="mut">${p.pipes_done ? p.pipes_done + '/' + p.total_pipes + ' pipes' : 'not installed yet'} · crew ${h(l.crewText) || '-'}</div></div><button class="btn sm" data-act="cont" data-id="${l.item.id}">Continue</button></div></div>`; }).join('');
+    return `<div class="card"><div class="row"><button class="btn alt sm" data-act="dprev">‹</button><div class="sp"><label style="margin-top:0">Date</label><input type="date" data-bind="date" value="${S.date}"></div><button class="btn alt sm" data-act="dnext">›</button></div>
+      <div class="row"><div class="sp"><label>Weather</label><select data-bind="weather">${['', 'Sunny', 'Cloudy', 'Light rain', 'Heavy rain'].map((w) => `<option ${rep && rep.weather === w ? 'selected' : ''}>${w}</option>`).join('')}</select></div>
+      <div style="width:90px"><label>Rain hrs</label><input type="number" inputmode="decimal" data-bind="rain" value="${rep ? N(rep.rain_hours) : 0}"></div></div></div>
+      <div class="kpis"><div class="kpi"><b>${fmt(day.metres, 1)} m</b><span>${day.pipes ? day.pipes + ' pipes installed' : 'Installed today'}</span></div><div class="kpi"><b>${fmt(day.headcount)} / ${fmt(day.man_hours)} h</b><span>Workers / man-hours</span></div></div>
+      ${cont ? '<h2>Continue from previous days</h2>' + cont : ''}
       <h2>Work today</h2>${cards || '<div class="card mut">No runs entered for this date yet.</div>'}
-      <button class="btn full" data-act="pick">+ Add run worked today</button>
-      <h2>Day notes</h2><textarea rows="2" data-bind="notes" placeholder="Site notes, instructions, visitors…">${h(rep ? rep.notes : '')}</textarea>`;
+      <button class="btn full" data-act="pick">+ Add another run</button>
+      <h2>Day notes</h2><textarea rows="2" data-bind="notes" placeholder="Site notes, instructions, visitors…">${h(rep ? rep.notes : '')}</textarea>
+      <button class="btn alt full" style="margin-top:10px" data-act="wa">Send today's report to WhatsApp</button>`;
   }
   function vPicker() {
     const q = S.q.toLowerCase(), r = R();
-    const list = r.progress.filter((p) => !q || (p.item.manhole_ref + ' ' + p.item.zone + ' ' + p.item.pipe_size).toLowerCase().includes(q))
+    const list = r.progress.filter((p) => (S.showDone || p.status !== 'Completed') && (!q || (p.item.manhole_ref + ' ' + p.item.zone + ' ' + p.item.pipe_size).toLowerCase().includes(q)))
+      .sort((a, b) => (a.status === 'On Going' ? 0 : 1) - (b.status === 'On Going' ? 0 : 1) || N(a.item.seq) - N(b.item.seq))
       .map((p) => `<button class="pick" data-act="openrun" data-id="${p.item.id}"><div class="row"><b class="sp">${h(p.item.seq)}. ${itemLabel(p.item)}</b><span class="st ${stCls(p.status)}">${p.status}</span></div>
       <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm' : 'size ?'} · ${p.pct === null ? 'length ?' : fmt(p.pct, 0) + '% of ' + fmt(p.overall, 0) + ' m'}</div></button>`).join('');
-    return `<div class="sheet"><div class="top"><button class="btn alt sm" data-act="closepick">‹ Back</button><b class="sp">Choose run</b></div><div class="body"><input data-bind="q" placeholder="Search manhole / zone / size" value="${h(S.q)}">${'<div style="height:8px"></div>'}${list}</div></div>`;
+    return `<div class="sheet"><div class="top"><button class="btn alt sm" data-act="closepick">‹ Back</button><b class="sp">Choose run</b><button class="btn alt sm" data-act="togdone">${S.showDone ? 'Hide done' : 'Show done'}</button></div><div class="body"><input data-bind="q" placeholder="Search manhole / zone / size" value="${h(S.q)}"><div style="height:8px"></div>${list}</div></div>`;
   }
   function vEditor() {
     const { rid, id } = S.edit, p = pRow(id), it = p.item, date = MEM.daily_reports.get(rid).report_date;
+    const acts = actsList(), on = todayActs(rid, id), installOn = acts.some((a) => a.kind === 'install' && on.has(a.id));
+    const layerMode = N(it.no_way) > 0 && N(it.length_per_way) > 0;
     const todayRow = MEM.daily_progress.get(E.ids.progress(rid, id)), qty = todayRow && !todayRow.deleted ? N(todayRow.qty_done) : 0;
     const before = p.done - qty, trades = live('labour_types'), crew = Object.fromEntries(linesOf('daily_labour', rid, id).map((l) => [l.labour_type_id, l]));
-    const lc = Object.keys(crew).length ? null : lastCrew(id, date);
+    const prev = lastEntry(id, date), canCopy = prev && !on.size && !Object.keys(crew).length;
     const norms = live('work_item_norms').filter((n) => n.work_item_id === id), used = Object.fromEntries(linesOf('daily_material_usage', rid, id).map((l) => [l.material_id, l]));
     const mids = [...new Set([...norms.map((n) => n.material_id), ...Object.keys(used)])];
     const mrows = mids.map((mid) => { const m = MEM.materials.get(mid); if (!m) return ''; const n = norms.find((x) => x.material_id === mid), std = qty * N(n && n.qty_per_unit), u = used[mid];
@@ -469,60 +739,96 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
     const dl = linesOf('daily_delays', rid, id).map((d) => `<div class="row" style="margin-bottom:4px"><span class="sp">${h((MEM.delay_reasons.get(d.reason_id) || {}).name)} · ${fmt(d.hours_lost, 1)} h <span class="mut">${h(d.description)}</span></span><button class="btn bad sm" data-act="deldelay" data-id="${d.id}">✕</button></div>`).join('');
     const tradeRows = trades.map((t) => { const c = crew[t.id]; return `<div class="row" style="margin-bottom:6px"><div class="sp"><b>${h(t.trade)}</b></div><div class="step"><button data-act="wk" data-t="${t.id}" data-d="-1">−</button><span>${c ? c.workers : 0}</span><button data-act="wk" data-t="${t.id}" data-d="1">+</button></div>
       <div style="width:62px"><input type="number" inputmode="decimal" data-hrs="${t.id}" value="${c ? c.hours_each : 8}" ${c ? '' : 'disabled'} title="hours"></div></div>`; }).join('');
+    // installation block
+    let inst = '';
+    if (layerMode) {
+      const rows = p.layers.map((l) => ({ ...l, t: installToday(rid, id, l.layer) })), doneLayers = rows.filter((l) => l.done >= l.cap && l.t === 0), open = rows.filter((l) => l.done < l.cap || l.t > 0);
+      const todayPipes = rows.reduce((s, l) => s + l.t, 0);
+      inst = `<div class="card">${open.map((l) => `<div class="row" style="margin-bottom:8px"><div class="sp"><b>Layer ${l.layer}</b><div class="mut">before today ${l.done - l.t} / ${l.cap} pipes</div></div>
+        <div class="step"><button data-act="ly" data-l="${l.layer}" data-d="-1">−</button><span>${l.t}</span><button data-act="ly" data-l="${l.layer}" data-d="1" ${l.done >= l.cap ? 'disabled' : ''}>+</button></div><button class="btn alt sm" data-act="lyfull" data-l="${l.layer}">Full</button></div>`).join('') || '<span class="mut">All layers complete.</span>'}
+        ${doneLayers.length ? `<div class="mut">✓ Complete: layer ${doneLayers.map((l) => l.layer).join(', ')}</div>` : ''}
+        <div class="row" style="margin-top:6px"><b class="sp">Today: ${todayPipes} pipes = ${fmt(todayPipes * N(it.length_per_way), 1)} m</b></div></div>`;
+    } else {
+      inst = `<div class="card"><div class="banner">No ways / length per way set, so enter metres manually. <a href="#" data-act="editrun" data-id="${id}">Fix run data</a></div><input type="number" inputmode="decimal" id="qty" data-qty value="${qty || ''}" placeholder="metres installed today">
+        <div class="row" style="margin-top:8px"><button class="btn alt sm sp" data-act="addm" data-v="10">+10</button><button class="btn alt sm sp" data-act="addm" data-v="50">+50</button><button class="btn alt sm sp" data-act="finish">Finish run</button></div></div>`;
+    }
     return `<div class="sheet"><div class="top"><b class="sp">${h(it.seq)}. ${itemLabel(it)}</b><button class="btn sm" data-act="closeedit">Done</button></div><div class="body">
-      ${p.check !== 'OK' ? `<div class="banner">${p.check === 'NO RATE' ? 'No contract rate for this size/sub-trade.' : 'Take-off data incomplete (size / ways / length).'} <a href="#" data-act="editrun" data-id="${id}">Fix run data</a></div>` : ''}
-      <div class="card"><div class="mut">${h(it.zone)} · ${it.pipe_size || '?'} mm · ${fmt(p.total_pipes)} pipe(s) × ${fmt(it.length_per_way, 1)} m</div>
+      ${p.check !== 'OK' ? `<div class="banner">${p.check === 'NO RATE' ? 'No contract rate for this size / sub-trade.' : p.check === 'NO SUB RATE' ? 'This run is Subcon but has no subcontract rate.' : 'Take-off data incomplete (size / ways / length).'} <a href="#" data-act="editrun" data-id="${id}">Fix run data</a></div>` : ''}
+      <div class="card"><div class="mut">${h(it.zone)} · ${it.pipe_size || '?'} mm · ${N(it.no_layer || 1)} layer(s) × ${fmt(it.no_way)} pipes × ${fmt(it.length_per_way, 1)} m${p.is_sub ? ' · Subcon ' + h(it.subcontractor) : ''}</div>
       <div class="row" style="margin-top:6px"><div class="sp"><span class="mut">Run length</span><br><b>${fmt(p.overall, 1)} m</b></div><div class="sp"><span class="mut">Done before today</span><br><b>${fmt(before, 1)} m</b></div><div class="sp"><span class="mut">Remaining</span><br><b>${fmt(Math.max(0, p.overall - before - qty), 1)} m</b></div></div>${p.pct !== null ? bar(p.pct) : ''}</div>
-      <h2>Installed today (metres, all ways)</h2><div class="card"><input type="number" inputmode="decimal" id="qty" data-qty value="${qty || ''}" placeholder="0">
-      <div class="row" style="margin-top:8px"><button class="btn alt sm sp" data-act="addm" data-v="10">+10</button><button class="btn alt sm sp" data-act="addm" data-v="50">+50</button><button class="btn alt sm sp" data-act="finish">Finish run</button></div></div>
-      <h2>Crew on this run (workers × hours)</h2><div class="card">${lc ? `<button class="btn alt sm full" style="margin-bottom:8px" data-act="copycrew">Copy crew from ${lc.date} (${lc.lines.map((l) => l.workers + ' ' + h((MEM.labour_types.get(l.labour_type_id) || {}).trade)).join(', ')})</button>` : ''}${tradeRows}</div>
-      <h2>Materials used today</h2><div class="card">${mrows || '<span class="mut">Enter take-off data to get standard quantities.</span>'}${mids.length ? '<button class="btn alt sm full" data-act="stdmat">Fill with standard quantities</button>' : ''}<div class="mut" style="margin-top:6px">Grey number = standard. Only what you type is recorded, so wastage is real.</div></div>
+      ${prev ? `<div class="card"><b>Last time · ${niceDate(prev.date)}</b><div>${prev.activities.map(h).join(' + ') || 'work'}${prev.layersText ? ' · ' + h(prev.layersText) : ''}</div><div class="mut">Crew: ${h(prev.crewText) || '-'}</div>${canCopy ? '<button class="btn alt sm full" style="margin-top:8px" data-act="same">Same activity &amp; crew as last time</button>' : ''}</div>` : ''}
+      <h2>What is being done today?</h2><div class="tabs wrap">${acts.map((a) => `<button class="${on.has(a.id) ? 'on' : ''}" data-act="act" data-a="${a.id}">${h(a.name)}</button>`).join('')}</div>
+      ${installOn || qty > 0 || !acts.some((a) => a.kind === 'install') ? '<h2>Installation today</h2>' + inst : '<div class="mut" style="margin:6px 2px">Choose “Install pipe” above to enter pipes by layer.</div>'}
+      <h2>Crew on this run (workers × hours)</h2><div class="card">${trades.length ? tradeRows : ''}</div>
+      <h2>Materials used today</h2><div class="card">${mrows || '<span class="mut">Enter take-off data to get standard quantities.</span>'}${mids.length ? '<button class="btn alt sm full" data-act="stdmat">Fill with standard quantities</button>' : ''}<button class="btn alt sm full" style="margin-top:6px" data-act="addreceipt">+ Material delivered / unloaded</button><div class="mut" style="margin-top:6px">Grey number = standard. Only what you type is recorded, so wastage is real.</div></div>
       <h2>Delays</h2><div class="card">${dl}<div class="row"><select id="dreason" class="sp">${live('delay_reasons').map((r) => `<option value="${r.id}">${h(r.name)}</option>`).join('')}</select><div style="width:70px"><input id="dhrs" type="number" inputmode="decimal" placeholder="hrs"></div></div>
       <input id="dnote" placeholder="Note (optional)" style="margin-top:6px"><button class="btn alt sm full" style="margin-top:6px" data-act="adddelay">+ Add delay</button></div>
       <button class="btn bad full" style="margin-top:14px" data-act="removeday">Remove this run from ${date}</button></div></div>`;
   }
-  const REPS = [['overview', 'Overview'], ['progress', 'Progress'], ['prod', 'Productivity'], ['mat', 'Material'], ['cost', 'Cost'], ['daily', 'Daily'], ['delay', 'Delays'], ['stock', 'Stock']];
-  function vReports() {
-    const r = R(), t = r.totals, cur = proj().currency || 'RM'; let body = '';
-    if (S.rep === 'overview') {
-      body = `<div class="kpis"><div class="kpi"><b>${t.pct === null ? '–' : fmt(t.pct, 1) + '%'}</b><span>Overall progress (${fmt(t.done)} / ${fmt(t.overall)} m)</span></div><div class="kpi"><b>${t.completed} / ${t.ongoing} / ${t.notstarted}</b><span>Runs done / ongoing / not started</span></div>
-      <div class="kpi"><b>${cur} ${fmt(t.earned)}</b><span>Earned value</span></div><div class="kpi"><b>${cur} ${fmt(t.retention)}</b><span>Retention held (${fmt(proj().retention_pct, 1)}%)</span></div>
-      <div class="kpi"><b>${cur} ${fmt(t.net_claim)}</b><span>Net claimable</span></div><div class="kpi"><b>${cur} ${fmt(t.total_cost)}</b><span>Cost to date (labour ${fmt(t.labour_cost)} + material ${fmt(t.material_cost)})</span></div>
+
+  // ---------------- reports ----------------
+  const REPS = [['dash', 'Dashboard'], ['overview', 'Overview'], ['progress', 'Progress'], ['log', 'Daily log'], ['prod', 'Productivity'], ['mat', 'Material'], ['cost', 'Cost'], ['daily', 'Daily'], ['delay', 'Delays'], ['stock', 'Stock']];
+  function repBody(k) {
+    const r = R(), t = r.totals, cur = proj().currency || 'RM';
+    if (k === 'dash') {
+      const sc = E.scurve(data(), PID, today()), tr = E.trend(r), last = tr.daily.length ? tr.daily[tr.daily.length - 1] : null, avg = tr.avg7.length ? tr.avg7[tr.avg7.length - 1] : null;
+      const lastPt = [...sc.points].reverse().find((x) => x.actual !== null), planAtLast = lastPt && lastPt.planned;
+      const scHtml = Charts.lineChart({ title: 'S-curve', labels: sc.points.map((x) => x.date), unit: '%', yMax: 100, series: [{ name: 'Planned', vals: sc.points.map((x) => x.planned), color: '#7d8b86', dash: true }, { name: 'Actual', vals: sc.points.map((x) => x.actual), color: '#0f9d7a' }] });
+      const trHtml = Charts.lineChart({ title: 'Productivity', labels: tr.labels, unit: '', series: [{ name: 'm per man-hour (daily)', vals: tr.daily, color: '#9aa8a2' }, { name: '7-day average', vals: tr.avg7, color: '#0f9d7a' }] });
+      const maxD = Math.max(1, ...r.delays.map((d) => d.hours_lost));
+      return `<div class="kpis"><div class="kpi"><b>${t.pct === null ? '–' : fmt(t.pct, 1) + '%'}</b><span>Actual progress</span></div><div class="kpi"><b style="color:${planAtLast !== null && planAtLast !== undefined && lastPt.actual < planAtLast ? 'var(--bad)' : 'var(--ok)'}">${planAtLast === null || planAtLast === undefined ? '–' : (lastPt.actual - planAtLast >= 0 ? '+' : '') + fmt(lastPt.actual - planAtLast, 1) + ' pts'}</b><span>vs plan (${planAtLast === null || planAtLast === undefined ? 'no plan' : fmt(planAtLast, 1) + '% planned'})</span></div>
+      <div class="kpi"><b>${last === null ? '–' : fmt(last, 2)}</b><span>m / man-hour, latest day${avg === null ? '' : ' (avg ' + fmt(avg, 2) + ')'}</span></div><div class="kpi"><b style="color:${t.alerts ? 'var(--bad)' : 'var(--ok)'}">${t.alerts}</b><span>Wastage alerts</span></div></div>
+      <h2>S-curve · planned vs actual</h2><div class="card">${scHtml}${sc.hasPlan ? '' : `<div class="banner" style="margin-top:8px">No plan yet. Set planned start/end on each run, or <a href="#" data-act="autoplan">auto-plan all runs</a> across the project start and end dates (Setup → Project).</div>`}</div>
+      <h2>Productivity trend</h2><div class="card">${trHtml}</div>
+      <h2>Wastage alerts (over allowance)</h2>${r.alerts.length ? r.alerts.slice(0, 8).map((a) => `<div class="card" style="border-color:var(--bad)"><div class="row"><b class="sp">${h(a.code)} · ${h(a.item && a.item.manhole_ref)}</b><b style="color:var(--bad)">+${fmt(a.wastage_pct, 1)}%</b></div><div class="mut">Used ${fmt(a.qty_used, 1)} vs standard ${fmt(a.theoretical_qty, 1)} ${h(a.unit)} · allowed ${fmt(a.allowed_pct, 1)}% · extra cost ${cur} ${fmt(a.variance_cost, 2)}</div></div>`).join('') : '<div class="card mut">No material is over its allowance.</div>'}
+      <h2>Delays by reason (hours)</h2><div class="card">${r.delays.slice(0, 6).map((d) => `<div style="margin-bottom:8px"><div class="row"><span class="sp">${h(d.reason)}</span><b>${fmt(d.hours_lost, 1)} h</b></div>${bar((100 * d.hours_lost) / maxD, '#d9822b')}</div>`).join('') || '<span class="mut">No delays recorded.</span>'}</div>`;
+    }
+    if (k === 'overview') {
+      return `<div class="kpis"><div class="kpi"><b>${t.pct === null ? '–' : fmt(t.pct, 1) + '%'}</b><span>Overall progress (${fmt(t.done)} / ${fmt(t.overall)} m)</span></div><div class="kpi"><b>${t.completed} / ${t.ongoing} / ${t.notstarted}</b><span>Runs done / ongoing / not started</span></div>
+      <div class="kpi"><b>${cur} ${fmt(t.earned)}</b><span>Earned (contract rate)</span></div><div class="kpi"><b>${cur} ${fmt(t.retention)}</b><span>Retention held (${fmt(proj().retention_pct, 1)}%)</span></div>
+      <div class="kpi"><b>${cur} ${fmt(t.net_claim)}</b><span>Net claimable</span></div><div class="kpi"><b>${cur} ${fmt(t.total_cost)}</b><span>Cost: labour ${fmt(t.labour_cost)} + material ${fmt(t.material_cost)} + subcon ${fmt(t.sub_cost)}</span></div>
       <div class="kpi"><b style="color:${t.profit < 0 ? 'var(--bad)' : 'var(--ok)'}">${cur} ${fmt(t.profit)}</b><span>Profit to date ${t.margin_pct === null ? '' : '(' + fmt(t.margin_pct, 1) + '%)'}</span></div><div class="kpi"><b>${cur} ${fmt(t.contract_value)}</b><span>Contract value of take-off</span></div></div>
       ${t.missing ? `<div class="banner" style="margin-top:10px">${t.missing} run(s) have incomplete take-off data or no rate - see Runs tab.</div>` : ''}
       <h2>By pipe size</h2>${tbl(['Size', 'Runs', 'Length m', 'Done m', '%'], r.bySize.map((x) => [h(x.key), x.runs, fmt(x.overall, 1), fmt(x.done, 1), x.pct === null ? '–' : fmt(x.pct, 1)]), [1, 2, 3, 4])}
       <h2>By zone</h2>${tbl(['Zone', 'Runs', 'Length m', 'Done m', '%'], r.byZone.map((x) => [h(x.key), x.runs, fmt(x.overall, 1), fmt(x.done, 1), x.pct === null ? '–' : fmt(x.pct, 1)]), [1, 2, 3, 4])}`;
-    } else if (S.rep === 'progress') body = tbl(['#', 'Run', 'Zone', 'Size', 'Length m', 'Done m', '%', 'Status', 'Last'], r.progress.map((p) => [p.item.seq, h(p.item.manhole_ref), h(p.item.zone), p.item.pipe_size || '–', fmt(p.overall, 1), fmt(p.done, 1), p.pct === null ? '–' : fmt(p.pct, 1), `<span class="st ${stCls(p.status)}">${p.status}</span>`, p.last_date || '–']), [4, 5, 6]);
-    else if (S.rep === 'prod') body = `<h2>By trade</h2>${tbl(['Trade', 'Man-hours', 'Labour cost'], r.byTrade.map((b) => [h(b.trade), fmt(b.man_hours, 1), fmt(b.cost, 2)]), [1, 2])}<h2>By run and trade</h2>` +
+    }
+    if (k === 'progress') return tbl(['#', 'Run', 'Zone', 'Size', 'Length m', 'Done m', 'Pipes', '%', 'Status', 'By', 'Last'], r.progress.map((p) => [p.item.seq, h(p.item.manhole_ref), h(p.item.zone), p.item.pipe_size || '–', fmt(p.overall, 1), fmt(p.done, 1), p.pipes_done + '/' + p.total_pipes, p.pct === null ? '–' : fmt(p.pct, 1), `<span class="st ${stCls(p.status)}">${p.status}</span>`, p.is_sub ? 'Subcon' : 'Own', p.last_date || '–']), [4, 5, 6, 7]);
+    if (k === 'log') return tbl(['Date', 'Run', 'Activity', 'Layers / pipes', 'm', 'Crew'], LG().slice().reverse().map((l) => [l.date, h(l.item.manhole_ref), h(l.activities.join(' + ')), h(l.layersText), l.metres ? fmt(l.metres, 1) : '', h(l.crewText)]), [4]);
+    if (k === 'prod') return `<h2>By trade</h2>${tbl(['Trade', 'Man-hours', 'Labour cost'], r.byTrade.map((b) => [h(b.trade), fmt(b.man_hours, 1), fmt(b.cost, 2)]), [1, 2])}<h2>By run and trade</h2>` +
       tbl(['Run', 'Trade', 'Man-h', 'Done m', 'm / man-h', 'Hrs / m', 'Plan hrs/m', 'Prod %'], r.productivity.map((x) => [h(x.item && x.item.manhole_ref), h(x.trade), fmt(x.man_hours, 1), fmt(x.qty_done, 1), fmt(x.output_per_mh, 2), fmt(x.actual_hrs_per_unit, 2), x.planned_hrs_per_unit ? fmt(x.planned_hrs_per_unit, 2) : 'set in Setup', x.productivity_pct === null ? '–' : fmt(x.productivity_pct, 0)]), [2, 3, 4, 5, 6, 7]);
-    else if (S.rep === 'mat') body = `<h2>By material</h2>${tbl(['Material', 'Used', 'Standard', 'Variance', 'Waste %', 'Allowed %', 'Variance cost'], r.byMaterial.map((m) => { const v = m.used - m.theo, w = m.theo > 0 ? (100 * v) / m.theo : null; return [h(m.code), fmt(m.used, 1), fmt(m.theo, 1), fmt(v, 1), w === null ? '–' : `<span style="color:${w > m.allowed ? 'var(--bad)' : 'var(--ok)'}">${fmt(w, 1)}</span>`, fmt(m.allowed, 1), fmt(m.vcost, 2)]; }), [1, 2, 3, 4, 5, 6])}<h2>By run</h2>` +
+    if (k === 'mat') return `<h2>By material</h2>${tbl(['Material', 'Used', 'Standard', 'Variance', 'Waste %', 'Allowed %', 'Variance cost'], r.byMaterial.map((m) => { const v = m.used - m.theo, w = m.theo > 0 ? (100 * v) / m.theo : null; return [h(m.code), fmt(m.used, 1), fmt(m.theo, 1), fmt(v, 1), w === null ? '–' : `<span style="color:${w > m.allowed ? 'var(--bad)' : 'var(--ok)'}">${fmt(w, 1)}</span>`, fmt(m.allowed, 1), fmt(m.vcost, 2)]; }), [1, 2, 3, 4, 5, 6])}<h2>By run</h2>` +
       tbl(['Run', 'Material', 'Used', 'Standard', 'Waste %', 'Cost'], r.wastage.map((w) => [h(w.item && w.item.manhole_ref), h(w.code), fmt(w.qty_used, 1), fmt(w.theoretical_qty, 1), w.wastage_pct === null ? '–' : fmt(w.wastage_pct, 1), fmt(w.material_cost, 2)]), [2, 3, 4, 5]);
-    else if (S.rep === 'cost') body = tbl(['Run', 'Earned', 'Labour', 'Material', 'Cost', 'Profit', 'Margin %'], r.cost.filter((c) => c.earned || c.total_cost).map((c) => [h(c.item.manhole_ref), fmt(c.earned, 2), fmt(c.labour_cost, 2), fmt(c.material_cost, 2), fmt(c.total_cost, 2), fmt(c.profit, 2), c.margin_pct === null ? '–' : fmt(c.margin_pct, 1)]), [1, 2, 3, 4, 5, 6]);
-    else if (S.rep === 'daily') body = tbl(['Date', 'Weather', 'Metres', 'Earned', 'Workers', 'Man-h', 'Labour', 'Material', 'Delay h'], r.daily.map((d) => [d.date, h(d.weather), fmt(d.metres, 1), fmt(d.earned, 2), d.headcount, fmt(d.man_hours, 1), fmt(d.labour_cost, 2), fmt(d.material_cost, 2), fmt(d.delay_hours, 1)]), [2, 3, 4, 5, 6, 7, 8]);
-    else if (S.rep === 'delay') body = tbl(['Category', 'Reason', 'Times', 'Hours lost'], r.delays.map((d) => [h(d.category), h(d.reason), d.occurrences, fmt(d.hours_lost, 1)]), [2, 3]);
-    else if (S.rep === 'stock') body = tbl(['Code', 'Material', 'Unit', 'Received', 'Used', 'Balance'], r.stock.map((s) => [h(s.code), h(s.name), h(s.unit), fmt(s.received, 1), fmt(s.used, 1), `<b style="color:${s.balance < 0 ? 'var(--bad)' : 'inherit'}">${fmt(s.balance, 1)}</b>`]), [3, 4, 5]) + '<button class="btn alt full" data-act="addreceipt">+ Record delivery received</button>';
-    return `<div class="tabs">${REPS.map(([k, l]) => `<button class="${S.rep === k ? 'on' : ''}" data-act="rep" data-k="${k}">${l}</button>`).join('')}</div>${body}`;
+    if (k === 'cost') return tbl(['Run', 'Earned', 'Labour', 'Material', 'Subcon', 'Cost', 'Profit', 'Margin %'], r.cost.filter((c) => c.earned || c.total_cost).map((c) => [h(c.item.manhole_ref), fmt(c.earned, 2), fmt(c.labour_cost, 2), fmt(c.material_cost, 2), fmt(c.sub_cost, 2), fmt(c.total_cost, 2), fmt(c.profit, 2), c.margin_pct === null ? '–' : fmt(c.margin_pct, 1)]), [1, 2, 3, 4, 5, 6, 7]);
+    if (k === 'daily') return tbl(['Date', 'Weather', 'Metres', 'Pipes', 'Earned', 'Workers', 'Man-h', 'Labour', 'Material', 'Subcon', 'Delay h'], r.daily.map((d) => [d.date, h(d.weather), fmt(d.metres, 1), d.pipes, fmt(d.earned, 2), d.headcount, fmt(d.man_hours, 1), fmt(d.labour_cost, 2), fmt(d.material_cost, 2), fmt(d.sub_cost, 2), fmt(d.delay_hours, 1)]), [2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    if (k === 'delay') return tbl(['Category', 'Reason', 'Times', 'Hours lost'], r.delays.map((d) => [h(d.category), h(d.reason), d.occurrences, fmt(d.hours_lost, 1)]), [2, 3]);
+    if (k === 'stock') return tbl(['Code', 'Material', 'Unit', 'Received', 'Used', 'Balance'], r.stock.map((s) => [h(s.code), h(s.name), h(s.unit), fmt(s.received, 1), fmt(s.used, 1), `<b style="color:${s.balance < 0 ? 'var(--bad)' : 'inherit'}">${fmt(s.balance, 1)}</b>`]), [3, 4, 5]) + '<button class="btn alt full" data-act="addreceipt">+ Record delivery received</button>';
+    return '';
   }
+  const vReports = () => `<div class="row" style="margin-bottom:8px"><button class="btn sm sp" data-act="xl">⬇ Excel</button><button class="btn sm sp" data-act="pdf">PDF</button><button class="btn sm sp" data-act="wa">WhatsApp</button></div>
+    <div class="tabs">${REPS.map(([k, l]) => `<button class="${S.rep === k ? 'on' : ''}" data-act="rep" data-k="${k}">${l}</button>`).join('')}</div>${repBody(S.rep)}`;
+
   function vRuns() {
     const q = S.q.toLowerCase(), f = S.runFilter;
     const list = R().progress.filter((p) => (!q || (p.item.manhole_ref + ' ' + p.item.zone).toLowerCase().includes(q)) && (f === 'all' || (f === 'missing' && p.check !== 'OK') || (f === 'ongoing' && p.status === 'On Going') || (f === 'done' && p.status === 'Completed')))
       .map((p) => `<div class="card" data-act="editrun" data-id="${p.item.id}"><div class="row"><b class="sp">${h(p.item.seq)}. ${itemLabel(p.item)}</b><span class="st ${p.check === 'OK' ? stCls(p.status) : 'b'}">${p.check === 'OK' ? p.status : p.check}</span></div>
-      <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm × ' + p.total_pipes + ' × ' + fmt(p.item.length_per_way, 1) + ' m = ' + fmt(p.overall, 1) + ' m' : 'take-off data needed'}</div>${p.pct !== null ? bar(p.pct) : ''}</div>`).join('');
+      <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm · ' + N(p.item.no_layer || 1) + ' layer × ' + p.item.no_way + ' × ' + fmt(p.item.length_per_way, 1) + ' m = ' + fmt(p.overall, 1) + ' m' : 'take-off data needed'}${p.is_sub ? ' · Subcon' : ''}</div>${p.pct !== null ? bar(p.pct) : ''}</div>`).join('');
     return `<input data-bind="q" placeholder="Search runs" value="${h(S.q)}"><div class="tabs" style="margin-top:8px">${[['all', 'All'], ['missing', 'Needs data'], ['ongoing', 'On going'], ['done', 'Completed']].map(([k, l]) => `<button class="${f === k ? 'on' : ''}" data-act="runf" data-k="${k}">${l}</button>`).join('')}</div>${list}<button class="btn full" data-act="newrun">+ Add run</button>`;
   }
   function listCard(title, rows, addAct) { return `<h2>${title}</h2><div class="card">${rows.join('') || '<span class="mut">None</span>'}<button class="btn alt sm full" style="margin-top:8px" data-act="${addAct}">+ Add</button></div>`; }
   function vSetup() {
     const cfg = META.cfg || {}, p = proj(), line = (act, id, a, b) => `<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)" data-act="${act}" data-id="${id}"><span class="sp">${a}</span><span class="mut">${b}</span></div>`;
-    return `<div class="banner">Sample rates came from your workbook / placeholders. Check labour rates, contract rates and material prices before trusting cost reports.</div>
-    <h2>Project</h2><div class="card" data-act="editproj"><b>${h(p.name)}</b><div class="mut">Retention ${fmt(p.retention_pct, 1)}% · spacer every ${p.spacer_spacing} m, edge ${p.spacer_edge} m, +${p.spacer_extra} · ${p.plugs_per_way} plugs/way · ${p.subduct_lines} sub-duct lines · tap to edit</div></div>
+    return `<div class="banner">Check labour rates, contract rates, subcontract rates and material prices before trusting cost reports.</div>
+    <h2>Project</h2><div class="card" data-act="editproj"><b>${h(p.name)}</b><div class="mut">${p.start_date ? h(p.start_date) + ' → ' + h(p.end_date || '?') + ' · ' : ''}Retention ${fmt(p.retention_pct, 1)}% · spacer every ${p.spacer_spacing} m, edge ${p.spacer_edge} m, +${p.spacer_extra} · ${p.plugs_per_way} plugs/way · ${p.subduct_lines} sub-duct lines · tap to edit</div></div>
+    ${listCard('Contract rate (client pays you) &amp; subcontract rate (you pay subcon), RM per m', live('rate_items').map((x) => line('editrate', x.id, h(x.code) + ' · ' + h(x.description) + (x.pipe_size ? ' (' + x.pipe_size + ')' : ''), `<b>${fmt(x.rate, 2)}</b> / ${N(x.sub_rate) ? fmt(x.sub_rate, 2) : '–'}`)), 'newrate')}
+    ${listCard('Work activities', actsList().map((a) => line('editact', a.id, h(a.name), a.kind === 'install' ? 'counts progress' : '')), 'newact')}
     ${listCard('Labour trades (RM / hour)', live('labour_types').map((t) => line('edittrade', t.id, h(t.trade), 'RM ' + fmt(t.hourly_rate, 2) + (N(t.planned_hrs_per_m) ? ' · plan ' + t.planned_hrs_per_m + ' h/m' : ''))), 'newtrade')}
     ${listCard('Materials (unit cost)', live('materials').map((m) => line('editmat', m.id, h(m.code) + ' <span class="mut">' + h(m.unit) + '</span>', 'RM ' + fmt(m.unit_cost, 2) + ' · waste ' + fmt(N(m.wastage_allow) * 100, 0) + '%')), 'newmat')}
-    ${listCard('Contract rates (per metre)', live('rate_items').map((x) => line('editrate', x.id, h(x.code) + ' · ' + h(x.description) + (x.pipe_size ? ' (' + x.pipe_size + ')' : ''), 'RM ' + fmt(x.rate, 2))), 'newrate')}
     ${listCard('Delay reasons', live('delay_reasons').map((x) => line('editreason', x.id, h(x.name), h(x.category))), 'newreason')}
     <h2>Sync (online backup &amp; sharing)</h2><div class="card"><div class="mut" style="margin-bottom:6px">Works offline always. When signal returns, data uploads automatically. State: ${S.sync.state === 'err' ? '<b style="color:var(--bad)">' + h(S.sync.msg) + '</b>' : h(S.sync.msg || (cfg.access_token ? 'ready' : 'not connected'))} · ${pending()} change(s) waiting · last sync ${META.lastSync ? new Date(META.lastSync).toLocaleString() : 'never'}</div>
-      <label>Supabase URL</label><input id="s_url" value="${h(cfg.url || '')}" placeholder="https://xxxx.supabase.co"><label>Supabase anon key</label><input id="s_key" value="${h(cfg.key || '')}"><label>Email</label><input id="s_email" type="email" value="${h(cfg.email || '')}"><label>Password</label><input id="s_pw" type="password">
+      <label>Supabase URL</label><input id="s_url" value="${h(cfg.url || '')}" placeholder="https://xxxx.supabase.co"><label>Supabase publishable (anon) key</label><input id="s_key" value="${h(cfg.key || '')}"><label>Email</label><input id="s_email" type="email" value="${h(cfg.email || '')}"><label>Password</label><input id="s_pw" type="password">
       <div class="row" style="margin-top:8px"><button class="btn sp" data-act="signin">Sign in &amp; sync</button><button class="btn alt sp" data-act="syncnow">Sync now</button></div></div>
-    <h2>Backup</h2><div class="card"><div class="row"><button class="btn alt sp" data-act="export">Export backup file</button><button class="btn alt sp" data-act="import">Import backup</button></div><input type="file" id="impf" accept=".json" style="display:none"><div class="mut" style="margin-top:6px">Tip: export a backup weekly. Add to Home Screen so the app opens offline.</div></div>`;
+    <h2>Backup &amp; app</h2><div class="card"><div class="row"><button class="btn alt sp" data-act="export">Export backup file</button><button class="btn alt sp" data-act="import">Import backup</button></div><input type="file" id="impf" accept=".json" style="display:none"><div class="mut" style="margin-top:6px">Tip: export a backup weekly. Add to Home Screen so the app opens offline.</div>
+      <div class="row" style="margin-top:10px"><span class="sp mut">App version ${h(APP_VERSION)}</span><button class="btn alt sm" data-act="chkupd">Check for update</button></div></div>`;
   }
   // ---------------- generic form sheet ----------------
   function vForm() {
@@ -536,62 +842,103 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
   function openForm(f) { S.form = f; render(); updatePreview(); }
   function readForm() { const row = { ...S.form.row }; document.querySelectorAll('[data-f]').forEach((el) => { const k = el.dataset.f, fd = S.form.fields.find((x) => x.k === k); row[k] = fd.type === 'number' ? (el.value === '' ? null : +el.value) : el.value; }); return row; }
   function updatePreview() { if (!S.form || !S.form.preview) return; const el = $('#fprev'); if (el) el.innerHTML = S.form.preview(readForm()); }
-
-  const tradeOpts = () => [...new Set(live('rate_items').map((r) => r.subtrade))].map((s) => [s, s]);
+  const subtradeOpts = () => [...new Set(live('rate_items').map((r) => r.subtrade))].map((s) => [s, s]);
   function runForm(row, isNew) {
+    const oldL = N(row.length_per_way);
     openForm({ title: isNew ? 'New run' : 'Run ' + row.seq, row, fields: [
       { k: 'manhole_ref', label: 'Manhole ref (from – to)' }, { k: 'ref_code', label: 'Ref (EYD / MYD…)' }, { k: 'zone', label: 'Zone / section' },
-      { k: 'subtrade', label: 'Sub-trade', type: 'select', opts: tradeOpts() },
-      { k: 'pipe_size', label: 'Pipe size (mm)', type: 'number', hint: '110 / 63 / 50' }, { k: 'no_layer', label: 'No. of layers', type: 'number' }, { k: 'no_way', label: 'No. of ways per layer', type: 'number' },
-      { k: 'length_per_way', label: 'Length per way (m, drawing)', type: 'number' }, { k: 'subduct_pipes', label: 'Pipes with sub-duct', type: 'number' },
-      { k: 'rate_override', label: 'Rate override (RM/m)', type: 'number', hint: 'leave empty to use contract rate' }, { k: 'drawing_ref', label: 'Drawing ref' }, { k: 'remarks', label: 'Remarks' } ],
-      preview: (r) => { const d = E.derive(r, live('rate_items')); const pr = proj(), norms = E.deriveNorms(r, pr, live('materials'));
-        return `Pipes: <b>${fmt(d.total_pipes)}</b> · Run length: <b>${fmt(d.overall, 1)} m</b> · Rate: <b>RM ${fmt(d.rate, 2)}</b> · Value: <b>RM ${fmt(d.overall * d.rate)}</b><br>Standard materials for whole run: ${norms.map((n) => h(MEM.materials.get(n.material_id).code) + ' ' + fmt(n.qty_per_unit * d.overall, 0)).join(' · ') || '–'}`; },
-      onSave: (r) => { r.no_layer = r.no_layer || 1; put('work_items', r); regenNorms(r); } });
+      { k: 'subtrade', label: 'Sub-trade', type: 'select', opts: subtradeOpts() },
+      { k: 'pipe_size', label: 'Pipe size (mm)', type: 'number', hint: '110 / 63 / 50' }, { k: 'no_layer', label: 'No. of layers', type: 'number' }, { k: 'no_way', label: 'No. of pipes (ways) per layer', type: 'number' },
+      { k: 'length_per_way', label: 'Length per pipe (m, drawing)', type: 'number' }, { k: 'subduct_pipes', label: 'Pipes with sub-duct', type: 'number' },
+      { k: 'executed_by', label: 'Executed by', type: 'select', opts: [['Own', 'Own crew'], ['Subcon', 'Subcontractor']] }, { k: 'subcontractor', label: 'Subcontractor name (if Subcon)' },
+      { k: 'rate_override', label: 'Contract rate override (RM/m)', type: 'number', hint: 'empty = use Setup rate' }, { k: 'sub_rate_override', label: 'Subcontract rate override (RM/m)', type: 'number', hint: 'empty = use Setup rate' },
+      { k: 'planned_start', label: 'Planned start', type: 'date' }, { k: 'planned_end', label: 'Planned end', type: 'date' }, { k: 'drawing_ref', label: 'Drawing ref' }, { k: 'remarks', label: 'Remarks' } ],
+      preview: (r) => { const d = E.derive(r, live('rate_items')), pr = proj(), norms = E.deriveNorms(r, pr, live('materials')), sub = E.isSub(r);
+        return `Pipes: <b>${fmt(d.total_pipes)}</b> · Run length: <b>${fmt(d.overall, 1)} m</b><br>Contract rate <b>RM ${fmt(d.rate, 2)}</b> → value <b>RM ${fmt(d.overall * d.rate)}</b>${sub ? `<br>Subcontract rate <b>RM ${fmt(d.sub_rate, 2)}</b> → cost <b>RM ${fmt(d.overall * d.sub_rate)}</b> · margin <b>RM ${fmt(d.overall * (d.rate - d.sub_rate))}</b>` : ''}<br>Standard materials for whole run: ${norms.map((n) => h(MEM.materials.get(n.material_id).code) + ' ' + fmt(n.qty_per_unit * d.overall, 0)).join(' · ') || '–'}`; },
+      onSave: (r) => { r.no_layer = r.no_layer || 1; r.executed_by = r.executed_by || 'Own'; put('work_items', r); regenNorms(r); if (N(r.length_per_way) !== oldL) recalcInstallMetres(r.id); } });
   }
   function simpleForm(title, table, row, fields, extra) { openForm({ title, row, fields, onSave: (r) => { put(table, r); if (extra) extra(r); }, onDelete: row._exists ? () => { del(table, row.id); if (extra) extra(row); } : null }); }
+
+  // ---------------- export: Excel / PDF / WhatsApp ----------------
+  const meta = () => ({ project: proj().name, generated: today(), currency: proj().currency || 'RM' });
+  async function exportExcel() {
+    const bytes = Export.buildXlsx(Export.reportSheets(R(), LG(), meta())), name = `${proj().code}_report_${today()}.xlsx`;
+    const file = new File([bytes], name, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: name }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    const u = document.createElement('a'); u.href = URL.createObjectURL(file); u.download = name; document.body.appendChild(u); u.click(); u.remove(); toast('Excel file saved: ' + name);
+  }
+  function printReport() {
+    let el = $('#printArea'); if (!el) { el = document.createElement('div'); el.id = 'printArea'; document.body.appendChild(el); }
+    el.innerHTML = `<h1 style="font-size:20px">${h(proj().name)}</h1><div class="mut">Report generated ${today()} · App ${h(APP_VERSION)}</div>` + ['dash', 'overview', 'progress', 'log', 'cost', 'mat', 'prod', 'daily', 'delay', 'stock'].map((k) => `<h2>${REPS.find((x) => x[0] === k)[1]}</h2>${repBody(k).replace(/<button[^>]*>.*?<\/button>/g, '').replace(/<a [^>]*data-act[^>]*>.*?<\/a>/g, '')}`).join('');
+    document.body.classList.add('printing'); setTimeout(() => { window.print(); }, 150);
+  }
+  window.addEventListener('afterprint', () => document.body.classList.remove('printing'));
+  const waMessage = () => Export.waText(R(), LG(), S.date, meta());
+
+  function vWa() {
+    const txt = waMessage();
+    return `<div class="sheet" style="z-index:35"><div class="top"><button class="btn alt sm" data-act="wacancel">‹ Back</button><b class="sp">WhatsApp report</b></div><div class="body"><label>Date</label><input type="date" data-bind="wadate" value="${S.date}">
+      <label style="margin-top:12px">Message (progress only, no costs)</label><textarea id="watext" rows="14" style="font-size:13px">${h(txt)}</textarea>
+      <a class="btn full" style="display:block;text-align:center;text-decoration:none;margin-top:10px" id="walink" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">Open WhatsApp</a>
+      <button class="btn alt full" style="margin-top:8px" data-act="wacopy">Copy text</button></div></div>`;
+  }
 
   // ---------------- render + events ----------------
   function render() {
     const app = $('#app'); const keep = window.scrollY;
     const main = S.tab === 'entry' ? vEntry() : S.tab === 'reports' ? vReports() : S.tab === 'runs' ? vRuns() : vSetup();
     app.innerHTML = `<header id="hdr"></header><main>${main}</main><nav>${[['entry', '✎', 'Daily entry'], ['reports', '▤', 'Reports'], ['runs', '≣', 'Runs'], ['setup', '⚙', 'Setup']].map(([k, i, l]) => `<button class="${S.tab === k ? 'on' : ''}" data-act="tab" data-k="${k}"><b>${i}</b>${l}</button>`).join('')}</nav>` +
-      (S.picker ? vPicker() : '') + (S.edit ? vEditor() : '') + (S.form ? vForm() : '');
+      (S.picker ? vPicker() : '') + (S.edit ? vEditor() : '') + (S.form ? vForm() : '') + (S.wa ? vWa() : '');
     renderHeader(); window.scrollTo(0, keep);
   }
+  const shiftDate = (n) => { S.date = E.ds(E.dn(S.date) + n); };
   document.addEventListener('click', (e) => {
-    const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, id = a.dataset.id; if (a.tagName === 'A') e.preventDefault();
+    const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, id = a.dataset.id; if (a.tagName === 'A' && a.dataset.act !== undefined && a.getAttribute('target') !== '_blank') e.preventDefault();
+    if (a.disabled) return;
     const rid = S.edit && S.edit.rid, iid = S.edit && S.edit.id;
+    const openEdit = (itemId) => { const r_ = ensureReport(S.date); if (!todayActs(r_, itemId).size && !linesOf('daily_labour', r_, itemId).length && lastEntry(itemId, S.date)) continueFrom(r_, itemId, S.date); S.edit = { rid: r_, id: itemId }; };
     const A = {
       tab: () => { S.tab = a.dataset.k; S.q = ''; },
       rep: () => { S.rep = a.dataset.k; }, runf: () => { S.runFilter = a.dataset.k; },
+      dprev: () => shiftDate(-1), dnext: () => shiftDate(1),
       syncnow: () => { doSync(true); return 'none'; },
-      pick: () => { S.picker = true; S.q = ''; }, closepick: () => { S.picker = false; },
-      openrun: () => { S.picker = false; S.edit = { rid: ensureReport(S.date), id }; },
+      pick: () => { S.picker = true; S.q = ''; }, closepick: () => { S.picker = false; }, togdone: () => { S.showDone = !S.showDone; },
+      openrun: () => { S.picker = false; openEdit(id); },
+      cont: () => openEdit(id),
       edit: () => { S.edit = { rid: ensureReport(S.date), id }; }, closeedit: () => { S.edit = null; },
-      addm: () => { const cur = N($('#qty').value); if (setProgress(rid, iid, cur + +a.dataset.v)) { } },
+      act: () => setActivity(rid, iid, a.dataset.a, !todayActs(rid, iid).has(a.dataset.a)),
+      same: () => continueFrom(rid, iid, MEM.daily_reports.get(rid).report_date),
+      ly: () => { setInstall(rid, iid, +a.dataset.l, installToday(rid, iid, +a.dataset.l) + +a.dataset.d); },
+      lyfull: () => { const l = pRow(iid).layers.find((x) => x.layer === +a.dataset.l), t = installToday(rid, iid, l.layer); setInstall(rid, iid, l.layer, l.cap - (l.done - t)); },
+      addm: () => { setProgress(rid, iid, N($('#qty').value) + +a.dataset.v); },
       finish: () => { const p = pRow(iid), cur = N($('#qty').value); setProgress(rid, iid, Math.max(0, +(p.overall - (p.done - cur)).toFixed(3))); },
       wk: () => { const l = MEM.daily_labour.get(E.ids.labour(rid, iid, a.dataset.t)), w = (l && !l.deleted ? l.workers : 0) + +a.dataset.d; const lc = lastCrew(iid, MEM.daily_reports.get(rid).report_date); const prev = lc && lc.lines.find((x) => x.labour_type_id === a.dataset.t); setLabour(rid, iid, a.dataset.t, Math.max(0, w), l && !l.deleted ? l.hours_each : prev ? prev.hours_each : 8); },
-      copycrew: () => { lastCrew(iid, MEM.daily_reports.get(rid).report_date).lines.forEach((l) => setLabour(rid, iid, l.labour_type_id, l.workers, l.hours_each)); },
-      stdmat: () => { const q = N($('#qty').value); live('work_item_norms').filter((n) => n.work_item_id === iid).forEach((n) => { const m = MEM.materials.get(n.material_id), v = q * n.qty_per_unit; setMaterial(rid, iid, n.material_id, m.unit === 'm' ? +v.toFixed(1) : Math.ceil(v - 1e-9)); }); },
+      stdmat: () => { const row = MEM.daily_progress.get(E.ids.progress(rid, iid)), q = row && !row.deleted ? N(row.qty_done) : 0; live('work_item_norms').filter((n) => n.work_item_id === iid).forEach((n) => { const m = MEM.materials.get(n.material_id), v = q * n.qty_per_unit; setMaterial(rid, iid, n.material_id, m.unit === 'm' ? +v.toFixed(1) : Math.ceil(v - 1e-9)); }); },
       adddelay: () => { const hrs = N($('#dhrs').value); put('daily_delays', { id: E.ids.uid('dl'), project_id: PID, report_id: rid, work_item_id: iid, reason_id: $('#dreason').value, hours_lost: hrs, description: $('#dnote').value }); },
       deldelay: () => del('daily_delays', id),
-      removeday: () => { if (!confirm('Remove this run from the day? Its progress, crew, materials and delays for this date will be deleted.')) return 'none'; setProgress(rid, iid, 0); ['daily_labour', 'daily_material_usage', 'daily_delays'].forEach((t) => linesOf(t, rid, iid).forEach((l) => del(t, l.id))); S.edit = null; },
+      removeday: () => { if (!confirm('Remove this run from the day? Its activities, pipes, crew, materials and delays for this date will be deleted.')) return 'none'; writeProgress(rid, iid, 0); ['daily_install', 'daily_activities', 'daily_labour', 'daily_material_usage', 'daily_delays'].forEach((t) => linesOf(t, rid, iid).forEach((l) => del(t, l.id))); S.edit = null; },
       editrun: () => { S.edit = null; runForm({ ...MEM.work_items.get(id), _exists: 1 }, false); return 'none'; },
-      newrun: () => { const n = live('work_items').length ? Math.max(...live('work_items').map((x) => N(x.seq))) + 1 : 1; runForm({ id: E.ids.uid('wi'), project_id: PID, seq: n, subtrade: 'Telecommunication Work', no_layer: 1, subduct_pipes: 0 }, true); return 'none'; },
-      editproj: () => { simpleForm('Project settings', 'projects', { ...proj() }, [{ k: 'name', label: 'Project name' }, { k: 'retention_pct', label: 'Retention % of contract sum', type: 'number' }, { k: 'spacer_edge', label: 'Spacer edge offset each end (m)', type: 'number' }, { k: 'spacer_spacing', label: 'Spacer spacing (m)', type: 'number' }, { k: 'spacer_extra', label: 'Extra spacers per way', type: 'number' }, { k: 'plugs_per_way', label: 'End plugs per way', type: 'number' }, { k: 'subduct_lines', label: 'Sub-duct lines per pipe', type: 'number' }], () => regenAllNorms()); return 'none'; },
+      newrun: () => { const n = live('work_items').length ? Math.max(...live('work_items').map((x) => N(x.seq))) + 1 : 1; runForm({ id: E.ids.uid('wi'), project_id: PID, seq: n, subtrade: 'Telecommunication Work', no_layer: 1, subduct_pipes: 0, executed_by: 'Own' }, true); return 'none'; },
+      editproj: () => { simpleForm('Project settings', 'projects', { ...proj() }, [{ k: 'name', label: 'Project name' }, { k: 'start_date', label: 'Project start date', type: 'date' }, { k: 'end_date', label: 'Project end date', type: 'date' }, { k: 'retention_pct', label: 'Retention % of contract sum', type: 'number' }, { k: 'spacer_edge', label: 'Spacer edge offset each end (m)', type: 'number' }, { k: 'spacer_spacing', label: 'Spacer spacing (m)', type: 'number' }, { k: 'spacer_extra', label: 'Extra spacers per way', type: 'number' }, { k: 'plugs_per_way', label: 'End plugs per way', type: 'number' }, { k: 'subduct_lines', label: 'Sub-duct lines per pipe', type: 'number' }], () => regenAllNorms()); return 'none'; },
+      autoplan: () => { const p = proj(); if (!p.start_date || !p.end_date) { toast('Set project start and end dates first (Setup → Project)'); return 'none'; } if (!confirm('Plan all runs in order between ' + p.start_date + ' and ' + p.end_date + '? This replaces existing planned dates.')) return 'none'; const items = live('work_items').sort((x, y) => N(x.seq) - N(y.seq)); E.autoPlan(items, live('rate_items'), p.start_date, p.end_date).forEach((pl) => put('work_items', { ...MEM.work_items.get(pl.id), planned_start: pl.planned_start, planned_end: pl.planned_end })); toast('Planned dates set for ' + items.length + ' runs'); },
       newtrade: () => { simpleForm('New trade', 'labour_types', { id: E.ids.uid('lt'), project_id: PID, hourly_rate: 0, planned_hrs_per_m: 0 }, tradeFields); return 'none'; },
       edittrade: () => { simpleForm('Trade', 'labour_types', { ...MEM.labour_types.get(id), _exists: 1 }, tradeFields); return 'none'; },
       newmat: () => { simpleForm('New material', 'materials', { id: E.ids.uid('mt'), project_id: PID, unit: 'pcs', unit_cost: 0, wastage_allow: 0 }, matFields, regenAllNorms); return 'none'; },
       editmat: () => { simpleForm('Material', 'materials', { ...MEM.materials.get(id), _exists: 1 }, matFields, regenAllNorms); return 'none'; },
-      newrate: () => { simpleForm('New contract rate', 'rate_items', { id: E.ids.uid('rt'), project_id: PID, unit: 'm', rate: 0, subtrade: 'Telecommunication Work' }, rateFields); return 'none'; },
-      editrate: () => { simpleForm('Contract rate', 'rate_items', { ...MEM.rate_items.get(id), _exists: 1 }, rateFields); return 'none'; },
+      newrate: () => { simpleForm('New rate', 'rate_items', { id: E.ids.uid('rt'), project_id: PID, unit: 'm', rate: 0, sub_rate: 0, subtrade: 'Telecommunication Work' }, rateFields); return 'none'; },
+      editrate: () => { simpleForm('Rates', 'rate_items', { ...MEM.rate_items.get(id), _exists: 1 }, rateFields); return 'none'; },
+      newact: () => { simpleForm('New activity', 'activities', { id: E.ids.uid('ac'), project_id: PID, seq: actsList().length + 1, kind: 'support' }, actFields); return 'none'; },
+      editact: () => { simpleForm('Activity', 'activities', { ...MEM.activities.get(id), _exists: 1 }, actFields); return 'none'; },
       newreason: () => { simpleForm('New delay reason', 'delay_reasons', { id: E.ids.uid('dr'), project_id: PID }, reasonFields); return 'none'; },
       editreason: () => { simpleForm('Delay reason', 'delay_reasons', { ...MEM.delay_reasons.get(id), _exists: 1 }, reasonFields); return 'none'; },
-      addreceipt: () => { simpleForm('Delivery received', 'material_receipts', { id: E.ids.uid('rc'), project_id: PID, receipt_date: today(), unit_cost: 0 }, [{ k: 'receipt_date', label: 'Date', type: 'date' }, { k: 'material_id', label: 'Material', type: 'select', opts: live('materials').map((m) => [m.id, m.code + ' - ' + m.name]) }, { k: 'qty', label: 'Quantity', type: 'number' }, { k: 'unit_cost', label: 'Unit cost', type: 'number' }, { k: 'supplier', label: 'Supplier' }, { k: 'do_number', label: 'DO number' }]); S.form.row.material_id = S.form.row.material_id || live('materials')[0].id; return 'none'; },
+      addreceipt: () => { S.edit = null; simpleForm('Material delivered / unloaded', 'material_receipts', { id: E.ids.uid('rc'), project_id: PID, receipt_date: S.date || today(), unit_cost: 0, material_id: live('materials')[0].id }, [{ k: 'receipt_date', label: 'Date', type: 'date' }, { k: 'material_id', label: 'Material', type: 'select', opts: live('materials').map((m) => [m.id, m.code + ' - ' + m.name]) }, { k: 'qty', label: 'Quantity', type: 'number' }, { k: 'unit_cost', label: 'Unit cost', type: 'number' }, { k: 'supplier', label: 'Supplier' }, { k: 'do_number', label: 'DO number' }]); return 'none'; },
       formcancel: () => { S.form = null; },
       formsave: () => { const f = S.form, row = readForm(); delete row._exists; f.onSave(row); S.form = null; },
       formdelete: () => { if (!confirm('Delete this item?')) return 'none'; S.form.onDelete(); S.form = null; },
+      xl: () => { exportExcel(); return 'none' }, pdf: () => { printReport(); return 'none'; },
+      wa: () => { S.wa = true; }, wacancel: () => { S.wa = false; },
+      wacopy: () => { const t = $('#watext').value; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('Copied'), () => { $('#watext').select(); document.execCommand('copy'); toast('Copied'); }); return 'none'; },
+      chkupd: () => { if (swReg) swReg.update().then(() => toast('Checked. If an update exists, a reload banner appears.')); else toast('Update check works once the app is opened from its web link'); return 'none'; },
       signin: async () => { const cfg = { ...(META.cfg || {}), url: $('#s_url').value.trim(), key: $('#s_key').value.trim(), email: $('#s_email').value.trim(), project_id: PID };
         try { const t = await Sync.signIn(cfg, (u, o) => fetch(u, o), cfg.email, $('#s_pw').value); Object.assign(cfg, t); setMeta('cfg', cfg); toast('Signed in'); doSync(true); } catch (err) { toast(String(err.message)); } return 'none'; },
       export: () => { const out = {}; TABLES.forEach((t) => (out[t] = [...MEM[t].values()].map(Sync.strip))); const b = new Blob([JSON.stringify(out)], { type: 'application/json' }), u = document.createElement('a'); u.href = URL.createObjectURL(b); u.download = 'site-daily-backup-' + today() + '.json'; u.click(); return 'none'; },
@@ -601,29 +948,37 @@ const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - 
   });
   const tradeFields = [{ k: 'trade', label: 'Trade name' }, { k: 'hourly_rate', label: 'Hourly rate (RM)', type: 'number' }, { k: 'planned_hrs_per_m', label: 'Planned man-hours per metre', type: 'number', hint: 'optional, for productivity %' }];
   const matFields = [{ k: 'code', label: 'Code (P110, DS110, EP110…)' }, { k: 'name', label: 'Description' }, { k: 'unit', label: 'Unit (m / pcs)' }, { k: 'unit_cost', label: 'Unit cost (RM per unit)', type: 'number' }, { k: 'wastage_allow', label: 'Allowed wastage (0.03 = 3%)', type: 'number' }];
-  const rateFields = [{ k: 'code', label: 'Code' }, { k: 'subtrade', label: 'Sub-trade', type: 'select', opts: [['Telecommunication Work', 'Telecommunication Work'], ['Medium Voltage', 'Medium Voltage'], ['Low Voltage', 'Low Voltage'], ['Extra Low Voltage', 'Extra Low Voltage'], ['Security', 'Security'], ['Street Lighting', 'Street Lighting']] }, { k: 'description', label: 'Description' }, { k: 'pipe_size', label: 'Pipe size (mm) used for auto-match', type: 'number' }, { k: 'rate', label: 'Rate (RM per m)', type: 'number' }];
+  const rateFields = [{ k: 'code', label: 'Code' }, { k: 'subtrade', label: 'Sub-trade', type: 'select', opts: ['Telecommunication Work', 'Medium Voltage', 'Low Voltage', 'Extra Low Voltage', 'Security', 'Street Lighting'].map((s) => [s, s]) }, { k: 'description', label: 'Description' }, { k: 'pipe_size', label: 'Pipe size (mm) used for auto-match', type: 'number' },
+    { k: 'rate', label: 'CONTRACT rate: client pays you (RM per m)', type: 'number' }, { k: 'sub_rate', label: 'SUBCONTRACT rate: you pay subcon (RM per m)', type: 'number' }];
+  const actFields = [{ k: 'name', label: 'Activity name' }, { k: 'seq', label: 'Order', type: 'number' }, { k: 'kind', label: 'Type', type: 'select', opts: [['support', 'Support work (no metres)'], ['install', 'Installation (counts progress by layer)']] }];
   const reasonFields = [{ k: 'code', label: 'Code' }, { k: 'category', label: 'Category' }, { k: 'name', label: 'Reason' }];
 
   document.addEventListener('change', (e) => {
     const el = e.target;
     if (el.dataset.f !== undefined) { updatePreview(); return; }
     if (el.dataset.bind === 'date') { S.date = el.value || today(); render(); return; }
+    if (el.dataset.bind === 'wadate') { S.date = el.value || today(); render(); return; }
     if (['weather', 'rain', 'notes'].includes(el.dataset.bind)) { const rid = ensureReport(S.date), r = { ...MEM.daily_reports.get(rid) }; if (el.dataset.bind === 'weather') r.weather = el.value; if (el.dataset.bind === 'rain') r.rain_hours = N(el.value); if (el.dataset.bind === 'notes') r.notes = el.value; put('daily_reports', r); render(); return; }
     if (el.id === 'impf') { const f = el.files[0]; if (!f) return; f.text().then((t) => { const d = JSON.parse(t); let n = 0; TABLES.forEach((tb) => (d[tb] || []).forEach((r) => { const l = MEM[tb].get(r.id); if (!l || String(l.updated_at) < String(r.updated_at)) { MEM[tb].set(r.id, { ...r, _dirty: 1 }); n++; } persist(tb, [MEM[tb].get(r.id)]); })); ver++; render(); toast('Imported ' + n + ' rows'); scheduleSync(); }).catch(() => toast('Not a valid backup file')); return; }
     if (!S.edit) return; const { rid, id } = S.edit;
-    if (el.dataset.qty !== undefined) { if (!setProgress(rid, id, N(el.value))) { /* rejected */ } render(); }
+    if (el.dataset.qty !== undefined) { setProgress(rid, id, N(el.value)); render(); }
     else if (el.dataset.hrs) { const l = MEM.daily_labour.get(E.ids.labour(rid, id, el.dataset.hrs)); if (l && !l.deleted) setLabour(rid, id, el.dataset.hrs, l.workers, N(el.value) || 8); render(); }
     else if (el.dataset.mat) { setMaterial(rid, id, el.dataset.mat, N(el.value)); render(); }
   });
-  document.addEventListener('input', (e) => { if (e.target.dataset.bind === 'q') { S.q = e.target.value; const pos = e.target.selectionStart; render(); const n = $('[data-bind="q"]'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } } });
+  document.addEventListener('input', (e) => { if (e.target.dataset.f !== undefined) { updatePreview(); return; } if (e.target.dataset.bind === 'q') { S.q = e.target.value; const pos = e.target.selectionStart; render(); const n = $('[data-bind="q"]'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } } });
 
   // ---------------- start ----------------
+  function showUpdateBanner() { if ($('#upd')) return; const d = document.createElement('div'); d.id = 'upd'; d.className = 'banner'; d.style.cssText = 'position:fixed;left:10px;right:10px;top:calc(56px + env(safe-area-inset-top));z-index:50;display:flex;gap:8px;align-items:center'; d.innerHTML = '<span style="flex:1">A new version of the app is ready.</span><button class="btn sm" id="updgo">Reload</button>'; document.body.appendChild(d); $('#updgo').onclick = () => location.reload(); }
   async function start() {
     await initStore(); await seedIfEmpty(); render();
-    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      const had = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.addEventListener('controllerchange', () => { if (had) showUpdateBanner(); });
+      navigator.serviceWorker.register('sw.js').then((reg) => { swReg = reg; reg.update(); }).catch(() => {});
+    }
     setTimeout(() => doSync(false), 1500);
   }
-  window.__app = { MEM, S, R, put, setProgress, setLabour, setMaterial, ensureReport, regenAllNorms, store, doSync, pending, render, META, start };
+  window.__app = { MEM, S, R, LG, put, setProgress, setInstall, setActivity, setLabour, setMaterial, ensureReport, continueFrom, continueCandidates, regenAllNorms, store, doSync, pending, render, META, start, data, exportExcel };
   start();
 })();
 

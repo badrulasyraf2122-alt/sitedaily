@@ -1,6 +1,6 @@
 // offline cache: app shell is cached on first visit, then opens with no signal
-const C='site-daily-v1';
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./','index.html','manifest.json','icon.svg','icon-192.png'])).then(()=>self.skipWaiting()))});
+const C='site-daily-20261121-2150'; 
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(['./','index.html','manifest.json','icon.svg','icon-192.png'].map(u=>fetch(u,{cache:'reload'}).then(r=>{if(!r.ok)throw 0;return c.put(u,r)})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
   const u=new URL(e.request.url);
