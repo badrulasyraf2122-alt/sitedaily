@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f5c4d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Site Daily - QS</title>
+<style>
+:root{--bg:#f4f6f5;--card:#fff;--ink:#14201c;--mut:#5f6f69;--line:#dbe3df;--pri:#0f5c4d;--pri2:#e3f1ed;--warn:#b45309;--warnbg:#fff4e0;--bad:#b42318;--ok:#18794e}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1513;--card:#18211e;--ink:#e8efec;--mut:#9fb0a9;--line:#2a3833;--pri:#3cb89d;--pri2:#16312b;--warn:#f0b35a;--warnbg:#33260f;--bad:#ff8a7a;--ok:#5fd39b}}
+*{box-sizing:border-box}html,body{margin:0}body{font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--pri);color:#fff;padding:calc(8px + env(safe-area-inset-top)) 14px 8px;display:flex;align-items:center;gap:8px}
+header h1{font-size:16px;margin:0;flex:1}
+.chip{font-size:12px;padding:3px 9px;border-radius:99px;background:rgba(255,255,255,.18);border:0;color:#fff;cursor:pointer}
+main{padding:12px;max-width:760px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;border:0;background:none;padding:10px 0 8px;font-size:12px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button b{font-size:18px;font-weight:400}nav button.on{color:var(--pri);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.row{display:flex;gap:8px;align-items:center}.row>*{min-width:0}.sp{flex:1}
+h2{font-size:14px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:16px 2px 6px}
+h3{margin:0 0 4px;font-size:15px}
+input,select,textarea{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-height:42px}
+label{font-size:12px;color:var(--mut);display:block;margin:8px 0 2px}
+.btn{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:600;background:var(--pri);color:#fff;min-height:42px}
+.btn.alt{background:var(--pri2);color:var(--pri)}.btn.bad{background:transparent;color:var(--bad);border:1px solid var(--bad)}.btn.sm{padding:6px 10px;min-height:34px;font-size:13px}
+.btn.full{width:100%}
+.mut{color:var(--mut);font-size:12px}.num{font-variant-numeric:tabular-nums;text-align:right}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--pri)}
+.st{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--pri2);color:var(--pri);white-space:nowrap}
+.st.g{background:#d6f3e3;color:#0b6b3a}.st.w{background:var(--warnbg);color:var(--warn)}.st.b{background:#fde3df;color:var(--bad)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:20px}.kpi span{font-size:12px;color:var(--mut)}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:left}th{font-size:11px;text-transform:uppercase;color:var(--mut);position:sticky;top:0;background:var(--card)}td.n,th.n{text-align:right}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}.tabs button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 12px;font-size:13px;color:var(--ink);white-space:nowrap}.tabs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.sheet{position:fixed;inset:0;background:var(--bg);z-index:20;overflow-y:auto;padding-bottom:40px}
+.sheet .top{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 12px 8px;display:flex;align-items:center;gap:8px;z-index:2}
+.sheet .body{padding:12px;max-width:760px;margin:0 auto}
+.step{display:flex;align-items:center;gap:6px}.step button{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:20px;color:var(--ink)}.step span{min-width:30px;text-align:center;font-weight:700;font-size:17px}
+.banner{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:10px}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));background:#222;color:#fff;padding:10px 12px;border-radius:10px;z-index:40;font-size:14px}
+.pick{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:6px;color:var(--ink);font:inherit}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const SEED={"projects":[{"id":"gpr1a","code":"GPR1A","name":"GPR1A (Serendah) - Telecommunication Duct","client":"","contract_sum":0,"retention_pct":5,"currency":"RM","spacer_edge":1,"spacer_spacing":2,"spacer_extra":2,"plugs_per_way":2,"subduct_lines":3,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"rate_items":[{"id":"rt_TEL-01","project_id":"gpr1a","code":"TEL-01","subtrade":"Telecommunication Work","description":"110mm Duct","unit":"m","pipe_size":110,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-02","project_id":"gpr1a","code":"TEL-02","subtrade":"Telecommunication Work","description":"50mm Duct","unit":"m","pipe_size":50,"rate":12,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-03","project_id":"gpr1a","code":"TEL-03","subtrade":"Telecommunication Work","description":"Subduct","unit":"m","pipe_size":null,"rate":5,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_TEL-04","project_id":"gpr1a","code":"TEL-04","subtrade":"Telecommunication Work","description":"Mandrel Test","unit":"m","pipe_size":null,"rate":3,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_MV-01","project_id":"gpr1a","code":"MV-01","subtrade":"Medium Voltage","description":"200mm HDPE Pipe","unit":"m","pipe_size":200,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_LV-01","project_id":"gpr1a","code":"LV-01","subtrade":"Low Voltage","description":"160mm HDPE Pipe","unit":"m","pipe_size":160,"rate":10,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_ELV-01","project_id":"gpr1a","code":"ELV-01","subtrade":"Extra Low Voltage","description":"160mm HDPE Pipe","unit":"m","pipe_size":160,"rate":10,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"rt_SP-01","project_id":"gpr1a","code":"SP-01","subtrade":"Security","description":"110mm Duct","unit":"m","pipe_size":110,"rate":14,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"labour_types":[{"id":"lt_1","project_id":"gpr1a","trade":"Foreman","hourly_rate":12,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_2","project_id":"gpr1a","trade":"Pipe layer","hourly_rate":8,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_3","project_id":"gpr1a","trade":"General worker","hourly_rate":6,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"lt_4","project_id":"gpr1a","trade":"Excavator operator","hourly_rate":12,"planned_hrs_per_m":0,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"materials":[{"id":"mt_P110","project_id":"gpr1a","code":"P110","name":"HDPE pipe 110mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":26.7,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P63","project_id":"gpr1a","code":"P63","name":"HDPE pipe 63mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":8.9,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P50","project_id":"gpr1a","code":"P50","name":"HDPE pipe 50mm x 100m SDR 11 (Orange Strip)","unit":"m","unit_cost":8.9,"wastage_allow":0.03,"roll_length":100,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_P40","project_id":"gpr1a","code":"P40","name":"Sub-duct 40mm","unit":"m","unit_cost":0,"wastage_allow":0.03,"roll_length":250,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS110","project_id":"gpr1a","code":"DS110","name":"Duct spacer 123mm (for 110mm pipe)","unit":"pcs","unit_cost":8.93,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS63","project_id":"gpr1a","code":"DS63","name":"Duct spacer 65mm (for 63mm pipe)","unit":"pcs","unit_cost":8.4,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_DS50","project_id":"gpr1a","code":"DS50","name":"Duct spacer 65mm (for 50mm pipe)","unit":"pcs","unit_cost":8.4,"wastage_allow":0.02,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP110","project_id":"gpr1a","code":"EP110","name":"End plug 110mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP63","project_id":"gpr1a","code":"EP63","name":"End plug 63mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"mt_EP50","project_id":"gpr1a","code":"EP50","name":"End plug 50mm","unit":"pcs","unit_cost":0,"wastage_allow":0,"roll_length":null,"updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"delay_reasons":[{"id":"dr_RAIN","project_id":"gpr1a","code":"RAIN","category":"Weather","name":"Heavy rain","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_MATL","project_id":"gpr1a","code":"MATL","category":"Material","name":"Material not delivered","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_LAB","project_id":"gpr1a","code":"LAB","category":"Labour","name":"Labour shortage","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_EQP","project_id":"gpr1a","code":"EQP","category":"Equipment","name":"Equipment breakdown","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_DWG","project_id":"gpr1a","code":"DWG","category":"Design","name":"Drawing / design query","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_UTIL","project_id":"gpr1a","code":"UTIL","category":"Client / Utility","name":"Utility clash / access / permit","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"dr_OTH","project_id":"gpr1a","code":"OTH","category":"Other","name":"Other","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}],"work_items":[{"id":"wi_001","project_id":"gpr1a","seq":1,"manhole_ref":"CV4 - 0135 TO CV4 - 0130","ref_code":"EYD","zone":"EW1 - EN1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-01","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_002","project_id":"gpr1a","seq":2,"manhole_ref":"CV4 - 0130 TO CV4 - 0125","ref_code":"EYD","zone":"EN2 - EN3","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_003","project_id":"gpr1a","seq":3,"manhole_ref":"CV4 - 0125 TO CV4 - 0120","ref_code":"EYD","zone":"EN4","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-03","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_004","project_id":"gpr1a","seq":4,"manhole_ref":"CV4 - 0120 TO CV4 - 0115","ref_code":"EYD","zone":"EN5 - E5b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-04","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_005","project_id":"gpr1a","seq":5,"manhole_ref":"CV4 - 0115 TO CV4 - 0110","ref_code":"EYD","zone":"E5b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-05","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_006","project_id":"gpr1a","seq":6,"manhole_ref":"CV4 - 0110 TO CV3 - 0150","ref_code":"EYD","zone":"E5b - ES5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-06","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_007","project_id":"gpr1a","seq":7,"manhole_ref":"CV4 - 0110 TO CV4 - ACV 0105","ref_code":"EYD","zone":"E5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-07","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_008","project_id":"gpr1a","seq":8,"manhole_ref":"CV4 - ACV 0105 TO CV4 - ZCV 100","ref_code":"EYD","zone":"E5a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-08","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_009","project_id":"gpr1a","seq":9,"manhole_ref":"CV4 - 0110 TO CV4 - 0600","ref_code":"EYD","zone":"E3b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-09","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_010","project_id":"gpr1a","seq":10,"manhole_ref":"CV4 - 0600 TO CV4 - 0210","ref_code":"EYD","zone":"E2b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-10","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_011","project_id":"gpr1a","seq":11,"manhole_ref":"CV4 - 0210 TO CV4 - 0205","ref_code":"MYD","zone":"E2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-11","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_012","project_id":"gpr1a","seq":12,"manhole_ref":"CV4 - 0205 TO CV4 - ZCV200","ref_code":"MYD","zone":"E2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-12","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_013","project_id":"gpr1a","seq":13,"manhole_ref":"CV4 - 0210 TO CV4 - 0215","ref_code":"MYD","zone":"E1b","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_014","project_id":"gpr1a","seq":14,"manhole_ref":"CV4 - 0215 TO CV4 - 0220","ref_code":"MYD","zone":"MS5a - MS4a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_015","project_id":"gpr1a","seq":15,"manhole_ref":"CV4 - 0220 TO CV4 - 0225","ref_code":"MYD","zone":"MS3a - MS2a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_016","project_id":"gpr1a","seq":16,"manhole_ref":"CV4 - 0225 TO CV4 - 0605","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_017","project_id":"gpr1a","seq":17,"manhole_ref":"CV4 - 0605 TO CV3 - 0615","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_018","project_id":"gpr1a","seq":18,"manhole_ref":"CV3 - 0615 TO CV3 - 0610","ref_code":"MYD","zone":"MS1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_019","project_id":"gpr1a","seq":19,"manhole_ref":"CV3 - 0610 TO BUILDING","ref_code":"MYD","zone":"MS1a - MN1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_020","project_id":"gpr1a","seq":20,"manhole_ref":"CV4 - 0605 TO CV4 - ACV 0305","ref_code":"MYD","zone":"MS1a - W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_021","project_id":"gpr1a","seq":21,"manhole_ref":"CV4 - ACV 0305 TO CV4 - 0605","ref_code":"MYD","zone":"W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_022","project_id":"gpr1a","seq":22,"manhole_ref":"CV4 - ACV 0305 TO CV4 - 0310","ref_code":"MYD","zone":"W5","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_023","project_id":"gpr1a","seq":23,"manhole_ref":"CV4 - 0310 TO CV4 - 0315","ref_code":"MYD","zone":"W5 - W4","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_024","project_id":"gpr1a","seq":24,"manhole_ref":"CV4 - 0315 TO CV4 - 0320","ref_code":null,"zone":"W4 - W2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_025","project_id":"gpr1a","seq":25,"manhole_ref":"CV4 - 0320 TO HUB?","ref_code":null,"zone":"W2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_026","project_id":"gpr1a","seq":26,"manhole_ref":"CV4 - 0320 TO CV4 - 0145","ref_code":null,"zone":"W2 - W1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_027","project_id":"gpr1a","seq":27,"manhole_ref":"CV4 - 0145 TO BUGGY SHED","ref_code":null,"zone":"W1","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_028","project_id":"gpr1a","seq":28,"manhole_ref":"CV4 - 0145 TO CV4 - 0140","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_029","project_id":"gpr1a","seq":29,"manhole_ref":"CV4 - 0140 TO CV3 - 0620","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_030","project_id":"gpr1a","seq":30,"manhole_ref":"CV3 - 0620 TO CV3 - 0740","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_031","project_id":"gpr1a","seq":31,"manhole_ref":"CV3 - 0740 TO FUEL GARAGE","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_032","project_id":"gpr1a","seq":32,"manhole_ref":"CV3 - 0740 TO CV3 - 0745","ref_code":"EYD","zone":"EW2 - ES1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_033","project_id":"gpr1a","seq":33,"manhole_ref":"CV3 - 0745 TO BUILDING","ref_code":"EYD","zone":"ES1a","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":null,"remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false},{"id":"wi_034","project_id":"gpr1a","seq":34,"manhole_ref":"CV4 - 0140 TO CV4 - 0135","ref_code":"EYD","zone":"EW2","subtrade":"Telecommunication Work","pipe_size":null,"no_layer":1,"no_way":null,"length_per_way":null,"subduct_pipes":0,"rate_override":null,"drawing_ref":"DR-02","remarks":"","updated_at":"2026-01-01T00:00:00.000Z","deleted":false}]};
+/* ENGINE: pure calculation logic (no DOM). Same code runs in the app and in tests.
+   Mirrors the Stage 1 SQL views and the GPR1A workbook formulas. */
+(function (root) {
+  const N = (v) => (v === null || v === undefined || v === '' || isNaN(+v) ? 0 : +v);
+  const live = (rows) => (rows || []).filter((r) => !r.deleted);
+
+  // ---- deterministic ids: the same day/run/trade always gets the same id, so
+  // two phones entering the same line merge instead of duplicating ----
+  const ids = {
+    report: (pid, date) => `${pid}_${date}`,
+    progress: (rid, item) => `${rid}__${item}`,
+    labour: (rid, item, trade) => `${rid}__${item}__${trade}`,
+    material: (rid, item, mat) => `${rid}__${item}__${mat}`,
+    uid: (p) => `${p}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`,
+  };
+
+  // ---- take-off derivations (workbook A_TakeOff: G = layer x way, K = G x length/way) ----
+  function rateFor(item, rateItems) {
+    if (item.rate_override !== null && item.rate_override !== undefined && item.rate_override !== '') return N(item.rate_override);
+    const ri = live(rateItems).find((r) => r.subtrade === item.subtrade && N(r.pipe_size) === N(item.pipe_size) && N(item.pipe_size) > 0);
+    return ri ? N(ri.rate) : 0;
+  }
+  function derive(item, rateItems) {
+    const total_pipes = N(item.no_layer || 1) * N(item.no_way);
+    const overall = total_pipes * N(item.length_per_way);
+    return { total_pipes, overall, rate: rateFor(item, rateItems) };
+  }
+  function dataCheck(item, rateItems) {
+    const d = derive(item, rateItems);
+    if (!N(item.pipe_size) || !N(item.no_way) || !N(item.length_per_way)) return 'MISSING DATA';
+    if (!d.rate) return 'NO RATE';
+    return 'OK';
+  }
+
+  // ---- norms (workbook A2_DuctSpacer): spacers/way = ROUNDUP((L-2*edge)/spacing + extra) ;
+  //      plugs = plugs_per_way x pipes ; sub-duct = pipes_with_subduct x L x lines ----
+  function deriveNorms(item, project, materials) {
+    const out = [];
+    const size = N(item.pipe_size), L = N(item.length_per_way), pipes = N(item.no_layer || 1) * N(item.no_way);
+    if (!size || !L || !pipes) return out;
+    const mats = live(materials);
+    const find = (code) => mats.find((m) => m.code === code);
+    const add = (code, q) => { const m = find(code); if (m && q > 0) out.push({ material_id: m.id, qty_per_unit: q }); };
+    add('P' + size, 1);
+    const perWay = Math.ceil((L - 2 * N(project.spacer_edge)) / N(project.spacer_spacing || 2) + N(project.spacer_extra) - 1e-9);
+    if (find('DS' + size) && perWay > 0) add('DS' + size, perWay / L);
+    if (find('EP' + size)) add('EP' + size, N(project.plugs_per_way) / L);
+    if (N(item.subduct_pipes) > 0) add('P40', (N(item.subduct_pipes) * N(project.subduct_lines)) / pipes);
+    return out;
+  }
+
+  // ---- main report computation ----
+  function compute(D, pid) {
+    const proj = live(D.projects).find((p) => p.id === pid) || {};
+    const items = live(D.work_items).filter((i) => i.project_id === pid).sort((a, b) => N(a.seq) - N(b.seq));
+    const reports = live(D.daily_reports).filter((r) => r.project_id === pid);
+    const rById = Object.fromEntries(reports.map((r) => [r.id, r]));
+    const inRep = (x) => rById[x.report_id];
+    const prog = live(D.daily_progress).filter(inRep);
+    const lab = live(D.daily_labour).filter(inRep);
+    const mat = live(D.daily_material_usage).filter(inRep);
+    const del = live(D.daily_delays).filter(inRep);
+    const trades = Object.fromEntries(live(D.labour_types).map((t) => [t.id, t]));
+    const mats = Object.fromEntries(live(D.materials).map((m) => [m.id, m]));
+    const reasons = Object.fromEntries(live(D.delay_reasons).map((r) => [r.id, r]));
+    const norms = live(D.work_item_norms);
+    const itemById = {};
+
+    // progress
+    const progress = items.map((it) => {
+      const d = derive(it, D.rate_items);
+      const rows = prog.filter((p) => p.work_item_id === it.id);
+      const done = rows.reduce((s, p) => s + N(p.qty_done), 0);
+      const dates = rows.filter((p) => N(p.qty_done) > 0).map((p) => rById[p.report_id].report_date).sort();
+      const pct = d.overall > 0 ? (100 * done) / d.overall : null;
+      const status = d.overall > 0 && done >= d.overall - 1e-9 ? 'Completed' : done > 0 ? 'On Going' : 'Not Started';
+      const row = { item: it, overall: d.overall, total_pipes: d.total_pipes, rate: d.rate, done, pct, earned: done * d.rate,
+        balance: Math.max(0, d.overall - done), status, first_date: dates[0] || null, last_date: dates[dates.length - 1] || null,
+        check: dataCheck(it, D.rate_items) };
+      itemById[it.id] = row; return row;
+    });
+
+    // labour productivity per item x trade
+    const labAgg = {};
+    lab.forEach((l) => {
+      const k = l.work_item_id + '|' + l.labour_type_id;
+      const a = (labAgg[k] = labAgg[k] || { item_id: l.work_item_id, trade_id: l.labour_type_id, man_hours: 0, cost: 0 });
+      const mh = N(l.workers) * N(l.hours_each); a.man_hours += mh; a.cost += mh * N(l.hourly_rate);
+    });
+    const productivity = Object.values(labAgg).map((a) => {
+      const p = itemById[a.item_id]; const t = trades[a.trade_id] || {};
+      const done = p ? p.done : 0;
+      const actual = done > 0 ? a.man_hours / done : null;
+      const planned = N(t.planned_hrs_per_m) || null;
+      return { item: p && p.item, trade: t.trade, man_hours: a.man_hours, labour_cost: a.cost, qty_done: done,
+        output_per_mh: a.man_hours > 0 ? done / a.man_hours : null, actual_hrs_per_unit: actual, planned_hrs_per_unit: planned,
+        productivity_pct: actual && planned ? (100 * planned) / actual : null };
+    });
+    // by trade (all runs)
+    const byTrade = {};
+    productivity.forEach((r) => { const b = (byTrade[r.trade] = byTrade[r.trade] || { trade: r.trade, man_hours: 0, cost: 0 }); b.man_hours += r.man_hours; b.cost += r.labour_cost; });
+
+    // material consumption & wastage per item x material
+    const matAgg = {};
+    mat.forEach((m) => {
+      const k = m.work_item_id + '|' + m.material_id;
+      const a = (matAgg[k] = matAgg[k] || { item_id: m.work_item_id, material_id: m.material_id, qty: 0, cost: 0 });
+      a.qty += N(m.qty_used); a.cost += N(m.qty_used) * N(m.unit_cost);
+    });
+    const wastage = Object.values(matAgg).map((a) => {
+      const p = itemById[a.item_id]; const m = mats[a.material_id] || {};
+      const n = norms.find((x) => x.work_item_id === a.item_id && x.material_id === a.material_id);
+      const theo = (p ? p.done : 0) * N(n && n.qty_per_unit);
+      const variance = a.qty - theo;
+      return { item: p && p.item, material: m.name, code: m.code, unit: m.unit, qty_used: a.qty, material_cost: a.cost,
+        theoretical_qty: theo, variance_qty: variance, wastage_pct: theo > 0 ? (100 * variance) / theo : null,
+        allowed_pct: N(m.wastage_allow) * 100, variance_cost: a.qty > 0 ? variance * (a.cost / a.qty) : 0 };
+    });
+    const byMaterial = {};
+    wastage.forEach((w) => { const b = (byMaterial[w.code] = byMaterial[w.code] || { code: w.code, material: w.material, unit: w.unit, used: 0, theo: 0, cost: 0, vcost: 0, allowed: w.allowed_pct });
+      b.used += w.qty_used; b.theo += w.theoretical_qty; b.cost += w.material_cost; b.vcost += w.variance_cost; });
+
+    // cost & profit per item
+    const labCostBy = {}, matCostBy = {};
+    lab.forEach((l) => (labCostBy[l.work_item_id] = (labCostBy[l.work_item_id] || 0) + N(l.workers) * N(l.hours_each) * N(l.hourly_rate)));
+    mat.forEach((m) => (matCostBy[m.work_item_id] = (matCostBy[m.work_item_id] || 0) + N(m.qty_used) * N(m.unit_cost)));
+    const cost = progress.map((p) => {
+      const lc = labCostBy[p.item.id] || 0, mc = matCostBy[p.item.id] || 0, tc = lc + mc;
+      return { item: p.item, earned: p.earned, labour_cost: lc, material_cost: mc, total_cost: tc, profit: p.earned - tc,
+        margin_pct: p.earned > 0 ? (100 * (p.earned - tc)) / p.earned : null };
+    });
+
+    // daily summary
+    const daily = reports.map((r) => {
+      const pr = prog.filter((x) => x.report_id === r.id), lb = lab.filter((x) => x.report_id === r.id);
+      const mt = mat.filter((x) => x.report_id === r.id), dl = del.filter((x) => x.report_id === r.id);
+      return { date: r.report_date, weather: r.weather, metres: pr.reduce((s, x) => s + N(x.qty_done), 0),
+        earned: pr.reduce((s, x) => s + N(x.qty_done) * (itemById[x.work_item_id] ? itemById[x.work_item_id].rate : 0), 0),
+        headcount: lb.reduce((s, x) => s + N(x.workers), 0), man_hours: lb.reduce((s, x) => s + N(x.workers) * N(x.hours_each), 0),
+        labour_cost: lb.reduce((s, x) => s + N(x.workers) * N(x.hours_each) * N(x.hourly_rate), 0),
+        material_cost: mt.reduce((s, x) => s + N(x.qty_used) * N(x.unit_cost), 0),
+        delay_hours: dl.reduce((s, x) => s + N(x.hours_lost), 0) };
+    }).sort((a, b) => (a.date < b.date ? 1 : -1));
+
+    // delays by category/reason
+    const dAgg = {};
+    del.forEach((d) => { const r = reasons[d.reason_id] || { category: '?', name: '?' }; const k = r.category + '|' + r.name;
+      const a = (dAgg[k] = dAgg[k] || { category: r.category, reason: r.name, occurrences: 0, hours_lost: 0 }); a.occurrences++; a.hours_lost += N(d.hours_lost); });
+    const delays = Object.values(dAgg).sort((a, b) => b.hours_lost - a.hours_lost);
+
+    // stock
+    const rec = live(D.material_receipts).filter((r) => r.project_id === pid);
+    const stock = Object.values(mats).map((m) => {
+      const received = rec.filter((r) => r.material_id === m.id).reduce((s, r) => s + N(r.qty), 0);
+      const used = mat.filter((x) => x.material_id === m.id).reduce((s, x) => s + N(x.qty_used), 0);
+      return { code: m.code, name: m.name, unit: m.unit, received, used, balance: received - used };
+    });
+
+    // totals, by size, by zone
+    const totalOverall = progress.reduce((s, p) => s + p.overall, 0), totalDone = progress.reduce((s, p) => s + p.done, 0);
+    const earned = progress.reduce((s, p) => s + p.earned, 0);
+    const totalCost = cost.reduce((s, c) => s + c.total_cost, 0);
+    const retention = (earned * N(proj.retention_pct)) / 100;
+    const group = (keyFn) => { const g = {}; progress.forEach((p) => { const k = keyFn(p) || '(none)'; const a = (g[k] = g[k] || { key: k, runs: 0, overall: 0, done: 0, earned: 0 }); a.runs++; a.overall += p.overall; a.done += p.done; a.earned += p.earned; });
+      return Object.values(g).map((a) => ({ ...a, pct: a.overall > 0 ? (100 * a.done) / a.overall : null })).sort((x, y) => (x.key > y.key ? 1 : -1)); };
+    const totals = { runs: items.length, overall: totalOverall, done: totalDone, pct: totalOverall > 0 ? (100 * totalDone) / totalOverall : null,
+      earned, retention, net_claim: earned - retention, labour_cost: cost.reduce((s, c) => s + c.labour_cost, 0), material_cost: cost.reduce((s, c) => s + c.material_cost, 0),
+      total_cost: totalCost, profit: earned - totalCost, margin_pct: earned > 0 ? (100 * (earned - totalCost)) / earned : null,
+      contract_value: progress.reduce((s, p) => s + p.overall * p.rate, 0),
+      completed: progress.filter((p) => p.status === 'Completed').length, ongoing: progress.filter((p) => p.status === 'On Going').length,
+      notstarted: progress.filter((p) => p.status === 'Not Started').length, missing: progress.filter((p) => p.check !== 'OK').length };
+    return { progress, productivity, byTrade: Object.values(byTrade), wastage, byMaterial: Object.values(byMaterial), cost, daily, delays, stock,
+      bySize: group((p) => p.item.pipe_size && p.item.pipe_size + ' mm'), byZone: group((p) => p.item.zone), totals };
+  }
+
+  const api = { N, live, ids, rateFor, derive, dataCheck, deriveNorms, compute };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Engine = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* SYNC: offline-first push/pull against Supabase (PostgREST + GoTrue).
+   Pure logic: the store and fetch are injected so it can be tested without a browser. */
+(function (root) {
+  // parents before children
+  const TABLES = ['projects', 'rate_items', 'labour_types', 'materials', 'delay_reasons', 'work_items', 'work_item_norms',
+    'daily_reports', 'daily_progress', 'daily_labour', 'daily_material_usage', 'daily_delays', 'material_receipts'];
+  const LOCAL_ONLY = ['_dirty', 'server_ts'];
+  const strip = (r) => { const o = { ...r }; LOCAL_ONLY.forEach((k) => delete o[k]); return o; };
+  const base = (cfg) => cfg.url.replace(/\/+$/, '');
+  const hdr = (cfg, extra) => ({ apikey: cfg.key, Authorization: 'Bearer ' + (cfg.access_token || cfg.key), 'Content-Type': 'application/json', ...(extra || {}) });
+
+  async function signIn(cfg, fetchFn, email, password) {
+    const r = await fetchFn(base(cfg) + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: cfg.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+    if (!r.ok) throw new Error('Sign-in failed (' + r.status + ')');
+    const j = await r.json(); return { access_token: j.access_token, refresh_token: j.refresh_token };
+  }
+  async function refresh(cfg, fetchFn) {
+    if (!cfg.refresh_token) throw new Error('Not signed in');
+    const r = await fetchFn(base(cfg) + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: cfg.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: cfg.refresh_token }) });
+    if (!r.ok) throw new Error('Session expired - sign in again');
+    const j = await r.json(); cfg.access_token = j.access_token; cfg.refresh_token = j.refresh_token; return cfg;
+  }
+  // request with one automatic token refresh on 401
+  async function call(ctx, url, opt) {
+    let r = await ctx.fetch(url, { ...opt, headers: hdr(ctx.cfg, opt.headers) });
+    if (r.status === 401) { await refresh(ctx.cfg, ctx.fetch); if (ctx.onToken) await ctx.onToken(ctx.cfg); r = await ctx.fetch(url, { ...opt, headers: hdr(ctx.cfg, opt.headers) }); }
+    if (!r.ok) throw new Error('Server ' + r.status + ' ' + (await r.text().catch(() => '')).slice(0, 120));
+    return r;
+  }
+
+  async function pull(ctx, table) {
+    const { cfg, store } = ctx; let cursor = (await store.getMeta('pull_' + table)) || '1970-01-01T00:00:00Z', n = 0;
+    for (;;) {
+      const f = table === 'projects' ? 'id=eq.' + encodeURIComponent(cfg.project_id) : 'project_id=eq.' + encodeURIComponent(cfg.project_id);
+      const url = `${base(cfg)}/rest/v1/${table}?${f}&server_ts=gt.${encodeURIComponent(cursor)}&order=server_ts.asc&limit=1000`;
+      const rows = await (await call(ctx, url, { method: 'GET' })).json();
+      if (!rows.length) break;
+      const out = [];
+      for (const r of rows) {
+        const l = await store.get(table, r.id);
+        if (l && l._dirty && String(l.updated_at) > String(r.updated_at)) continue; // local edit is newer: keep, will push
+        out.push({ ...r, _dirty: 0 });
+      }
+      await store.putMany(table, out); n += out.length;
+      cursor = rows[rows.length - 1].server_ts; await store.setMeta('pull_' + table, cursor);
+      if (rows.length < 1000) break;
+    }
+    return n;
+  }
+  async function push(ctx, table) {
+    const { cfg, store } = ctx; const dirty = await store.getDirty(table); let n = 0;
+    for (let i = 0; i < dirty.length; i += 200) {
+      const chunk = dirty.slice(i, i + 200);
+      await call(ctx, `${base(cfg)}/rest/v1/${table}?on_conflict=id`, { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(chunk.map(strip)) });
+      await store.clearDirty(table, chunk); n += chunk.length;
+    }
+    return n;
+  }
+  // pull first (so newer remote edits win), then push local changes
+  async function syncAll(ctx) {
+    const res = { pulled: 0, pushed: 0 };
+    for (const t of TABLES) res.pulled += await pull(ctx, t);
+    for (const t of TABLES) res.pushed += await push(ctx, t);
+    return res;
+  }
+  const api = { TABLES, strip, signIn, refresh, syncAll, pull, push };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Sync = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* APP: UI + on-device database (IndexedDB) + sync controller */
+(function () {
+  const E = Engine, N = E.N, TABLES = Sync.TABLES;
+  const PID = SEED.projects[0].id;
+  const MEM = {}; TABLES.forEach((t) => (MEM[t] = new Map()));
+  const META = {}; let IDB = null, ver = 0, cache = null, cacheVer = -1;
+  const S = { tab: 'entry', rep: 'overview', date: today(), edit: null, picker: null, form: null, q: '', runFilter: 'all', sync: { state: 'idle', msg: '', running: false } };
+
+  function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  const nowIso = () => new Date().toISOString();
+  const fmt = (n, d = 0) => (n === null || n === undefined || isNaN(n) ? '–' : Number(n).toLocaleString('en-MY', { minimumFractionDigits: d, maximumFractionDigits: d }));
+  const h = (s) => String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const live = (t) => [...MEM[t].values()].filter((r) => !r.deleted && (r.project_id === PID || t === 'projects'));
+  const proj = () => MEM.projects.get(PID);
+  const $ = (s, r) => (r || document).querySelector(s);
+
+  // ---------------- on-device database ----------------
+  function idbReq(r) { return new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+  async function initStore() {
+    if (typeof indexedDB !== 'undefined') {
+      IDB = await new Promise((res, rej) => {
+        const o = indexedDB.open('qs-site', 1);
+        o.onupgradeneeded = () => { TABLES.forEach((t) => o.result.createObjectStore(t, { keyPath: 'id' })); o.result.createObjectStore('meta', { keyPath: 'k' }); };
+        o.onsuccess = () => res(o.result); o.onerror = () => rej(o.error);
+      }).catch(() => null);
+    }
+    if (IDB) {
+      for (const t of TABLES) (await idbReq(IDB.transaction(t).objectStore(t).getAll())).forEach((r) => MEM[t].set(r.id, r));
+      (await idbReq(IDB.transaction('meta').objectStore('meta').getAll())).forEach((m) => (META[m.k] = m.v));
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+    }
+  }
+  function persist(t, rows) { if (!IDB) return; const tx = IDB.transaction(t, 'readwrite'), s = tx.objectStore(t); rows.forEach((r) => s.put(r)); }
+  function setMeta(k, v) { META[k] = v; if (IDB) IDB.transaction('meta', 'readwrite').objectStore('meta').put({ k, v }); }
+  function put(t, row) { row.updated_at = nowIso(); row._dirty = 1; row.deleted = !!row.deleted; MEM[t].set(row.id, row); persist(t, [row]); ver++; scheduleSync(); return row; }
+  function del(t, id) { const r = MEM[t].get(id); if (r) put(t, { ...r, deleted: true }); }
+  const store = {
+    get: async (t, id) => MEM[t].get(id),
+    putMany: async (t, rows) => { rows.forEach((r) => MEM[t].set(r.id, r)); persist(t, rows); ver++; },
+    getDirty: async (t) => [...MEM[t].values()].filter((r) => r._dirty),
+    clearDirty: async (t, chunk) => { const up = []; chunk.forEach((c) => { const m = MEM[t].get(c.id); if (m && m.updated_at === c.updated_at) { m._dirty = 0; up.push(m); } }); persist(t, up); },
+    getMeta: async (k) => META[k], setMeta: async (k, v) => setMeta(k, v),
+  };
+  const pending = () => TABLES.reduce((n, t) => n + [...MEM[t].values()].filter((r) => r._dirty).length, 0);
+  function data() { const d = {}; TABLES.forEach((t) => (d[t] = [...MEM[t].values()])); return d; }
+  function R() { if (cacheVer !== ver) { cache = E.compute(data(), PID); cacheVer = ver; } return cache; }
+  const pRow = (id) => R().progress.find((p) => p.item.id === id);
+
+  async function seedIfEmpty() {
+    if (MEM.projects.size) return;
+    TABLES.forEach((t) => (SEED[t] || []).forEach((r) => { MEM[t].set(r.id, { ...r, _dirty: 1 }); }));
+    TABLES.forEach((t) => persist(t, [...MEM[t].values()])); regenAllNorms(); ver++;
+  }
+  function regenNorms(item) {
+    const want = E.deriveNorms(item, proj(), live('materials')), keep = new Set();
+    want.forEach((w) => { const id = 'nm_' + item.id + '_' + w.material_id; keep.add(id); const ex = MEM.work_item_norms.get(id);
+      if (!ex || ex.deleted || Math.abs(N(ex.qty_per_unit) - w.qty_per_unit) > 1e-9) put('work_item_norms', { ...(ex || {}), id, project_id: PID, work_item_id: item.id, material_id: w.material_id, qty_per_unit: w.qty_per_unit, deleted: false }); });
+    live('work_item_norms').filter((n) => n.work_item_id === item.id && !keep.has(n.id)).forEach((n) => del('work_item_norms', n.id));
+  }
+  function regenAllNorms() { live('work_items').forEach(regenNorms); }
+
+  // ---------------- daily entry writers ----------------
+  function ensureReport(date) {
+    const id = E.ids.report(PID, date);
+    if (!MEM.daily_reports.get(id) || MEM.daily_reports.get(id).deleted) put('daily_reports', { ...(MEM.daily_reports.get(id) || {}), id, project_id: PID, report_date: date, weather: '', rain_hours: 0, notes: '', entered_by: META.user || '', deleted: false });
+    return id;
+  }
+  function setProgress(rid, itemId, qty) {
+    const pr = pRow(itemId), id = E.ids.progress(rid, itemId), ex = MEM.daily_progress.get(id), cur = ex && !ex.deleted ? N(ex.qty_done) : 0;
+    if (pr.overall > 0 && pr.done - cur + qty > pr.overall * 1.1 + 1e-9) { toast('Over 110% of run length (' + fmt(pr.overall, 1) + ' m) - check quantity'); return false; }
+    if (qty <= 0) { if (ex && !ex.deleted) del('daily_progress', id); return true; }
+    put('daily_progress', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, qty_done: qty, remarks: (ex && ex.remarks) || '', deleted: false }); return true;
+  }
+  function setLabour(rid, itemId, tradeId, workers, hours) {
+    const id = E.ids.labour(rid, itemId, tradeId), ex = MEM.daily_labour.get(id), alive = ex && !ex.deleted;
+    if (workers <= 0) { if (alive) del('daily_labour', id); return; }
+    put('daily_labour', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, labour_type_id: tradeId, workers, hours_each: hours,
+      hourly_rate: alive ? ex.hourly_rate : N(MEM.labour_types.get(tradeId).hourly_rate), deleted: false });
+  }
+  function setMaterial(rid, itemId, matId, qty) {
+    const id = E.ids.material(rid, itemId, matId), ex = MEM.daily_material_usage.get(id), alive = ex && !ex.deleted;
+    if (qty <= 0) { if (alive) del('daily_material_usage', id); return; }
+    put('daily_material_usage', { ...(ex || {}), id, project_id: PID, report_id: rid, work_item_id: itemId, material_id: matId, qty_used: qty,
+      unit_cost: alive ? ex.unit_cost : N(MEM.materials.get(matId).unit_cost), deleted: false });
+  }
+  const linesOf = (t, rid, itemId) => live(t).filter((l) => l.report_id === rid && l.work_item_id === itemId);
+  function lastCrew(itemId, before) {
+    const reps = live('daily_reports').filter((r) => r.report_date < before).sort((a, b) => (a.report_date < b.report_date ? 1 : -1));
+    for (const r of reps) { const l = linesOf('daily_labour', r.id, itemId); if (l.length) return { date: r.report_date, lines: l }; }
+    return null;
+  }
+
+  // ---------------- sync controller ----------------
+  let syncTimer = null;
+  function scheduleSync() { clearTimeout(syncTimer); syncTimer = setTimeout(() => doSync(false), 2500); }
+  async function doSync(manual) {
+    const cfg = META.cfg;
+    if (S.sync.running) return;
+    if (!cfg || !cfg.url || !cfg.key || !cfg.access_token) { if (manual) toast('Set up sync in Setup > Sync first'); return; }
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) { if (manual) toast('Offline - will sync when back online'); return; }
+    S.sync.running = true; S.sync.state = 'busy'; renderHeader();
+    try {
+      cfg.project_id = cfg.project_id || PID;
+      const res = await Sync.syncAll({ cfg, store, fetch: (u, o) => fetch(u, o), onToken: async (c) => setMeta('cfg', { ...c }) });
+      setMeta('lastSync', nowIso()); S.sync.state = 'ok'; S.sync.msg = `pulled ${res.pulled}, pushed ${res.pushed}`;
+      if (res.pulled) { ver++; regenCheck(); render(); }
+    } catch (e) { S.sync.state = 'err'; S.sync.msg = String(e.message || e); }
+    S.sync.running = false; renderHeader(); if (S.tab === 'setup' && !S.form) render();
+  }
+  function regenCheck() { /* norms are synced rows; nothing to do */ }
+  window.addEventListener('online', () => doSync(false));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) doSync(false); });
+  setInterval(() => doSync(false), 60000);
+
+  // ---------------- UI helpers ----------------
+  let toastT = null;
+  function toast(m) { let t = $('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 3200); }
+  const stCls = (s) => (s === 'Completed' ? 'g' : s === 'On Going' ? '' : 'w');
+  const bar = (p) => `<div class="bar"><i style="width:${Math.min(100, Math.max(0, N(p)))}%"></i></div>`;
+  function tbl(head, rows, nums) {
+    nums = nums || [];
+    return `<div class="card scroll"><table><tr>${head.map((x, i) => `<th class="${nums.includes(i) ? 'n' : ''}">${h(x)}</th>`).join('')}</tr>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${nums.includes(i) ? 'n' : ''}">${c}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${head.length}" class="mut">No data yet - enter a daily report first.</td></tr>`}</table></div>`;
+  }
+  const itemLabel = (it) => h(it.manhole_ref);
+
+  // ---------------- screens ----------------
+  function renderHeader() {
+    const el = $('#hdr'); if (!el) return; const p = pending(), on = typeof navigator === 'undefined' || navigator.onLine !== false;
+    const label = S.sync.state === 'busy' ? '↻ Syncing…' : S.sync.state === 'err' ? '⚠ Sync error' : !on ? `○ Offline${p ? ' · ' + p + ' to send' : ''}` : p ? `● ${p} to send` : META.cfg && META.cfg.access_token ? '● Synced' : '● Saved on phone';
+    el.innerHTML = `<h1>Site Daily · ${h(proj().code)}</h1><button class="chip" data-act="syncnow">${label}</button>`;
+  }
+  function vEntry() {
+    const rid = E.ids.report(PID, S.date), rep = MEM.daily_reports.get(rid), r = R();
+    const ids = new Set(); ['daily_progress', 'daily_labour', 'daily_material_usage', 'daily_delays'].forEach((t) => live(t).filter((l) => l.report_id === rid && l.work_item_id).forEach((l) => ids.add(l.work_item_id)));
+    const day = r.daily.find((d) => d.date === S.date) || { metres: 0, headcount: 0, man_hours: 0, labour_cost: 0, material_cost: 0, delay_hours: 0, earned: 0 };
+    const cards = [...ids].map((id) => pRow(id)).filter(Boolean).sort((a, b) => N(a.item.seq) - N(b.item.seq)).map((p) => {
+      const today_m = N((MEM.daily_progress.get(E.ids.progress(rid, p.item.id)) || {}).qty_done), crew = linesOf('daily_labour', rid, p.item.id);
+      const crewTxt = crew.map((c) => `${c.workers} ${h((MEM.labour_types.get(c.labour_type_id) || {}).trade)}`).join(', ');
+      return `<div class="card" data-act="edit" data-id="${p.item.id}"><div class="row"><h3 class="sp">${itemLabel(p.item)}</h3><span class="st ${stCls(p.status)}">${p.status}</span></div>
+        <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm' : 'size ?'}</div>
+        <div class="row" style="margin-top:6px"><b>${fmt(today_m, 1)} m today</b><span class="sp"></span><span class="mut">${p.pct === null ? 'no length' : fmt(p.pct, 1) + '% done'}</span></div>${p.pct !== null ? bar(p.pct) : ''}
+        <div class="mut" style="margin-top:4px">${crewTxt || 'No crew entered'}</div></div>`;
+    }).join('');
+    return `<div class="card"><div class="row"><div class="sp"><label>Date</label><input type="date" data-bind="date" value="${S.date}"></div>
+      <div class="sp"><label>Weather</label><select data-bind="weather">${['', 'Sunny', 'Cloudy', 'Light rain', 'Heavy rain'].map((w) => `<option ${rep && rep.weather === w ? 'selected' : ''}>${w}</option>`).join('')}</select></div>
+      <div style="width:84px"><label>Rain hrs</label><input type="number" inputmode="decimal" data-bind="rain" value="${rep ? N(rep.rain_hours) : 0}"></div></div></div>
+      <div class="kpis"><div class="kpi"><b>${fmt(day.metres, 1)} m</b><span>Installed today</span></div><div class="kpi"><b>RM ${fmt(day.earned)}</b><span>Earned today</span></div>
+      <div class="kpi"><b>${fmt(day.headcount)} / ${fmt(day.man_hours)} h</b><span>Workers / man-hours</span></div><div class="kpi"><b>RM ${fmt(day.labour_cost + day.material_cost)}</b><span>Cost today</span></div></div>
+      <h2>Work today</h2>${cards || '<div class="card mut">No runs entered for this date yet.</div>'}
+      <button class="btn full" data-act="pick">+ Add run worked today</button>
+      <h2>Day notes</h2><textarea rows="2" data-bind="notes" placeholder="Site notes, instructions, visitors…">${h(rep ? rep.notes : '')}</textarea>`;
+  }
+  function vPicker() {
+    const q = S.q.toLowerCase(), r = R();
+    const list = r.progress.filter((p) => !q || (p.item.manhole_ref + ' ' + p.item.zone + ' ' + p.item.pipe_size).toLowerCase().includes(q))
+      .map((p) => `<button class="pick" data-act="openrun" data-id="${p.item.id}"><div class="row"><b class="sp">${h(p.item.seq)}. ${itemLabel(p.item)}</b><span class="st ${stCls(p.status)}">${p.status}</span></div>
+      <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm' : 'size ?'} · ${p.pct === null ? 'length ?' : fmt(p.pct, 0) + '% of ' + fmt(p.overall, 0) + ' m'}</div></button>`).join('');
+    return `<div class="sheet"><div class="top"><button class="btn alt sm" data-act="closepick">‹ Back</button><b class="sp">Choose run</b></div><div class="body"><input data-bind="q" placeholder="Search manhole / zone / size" value="${h(S.q)}">${'<div style="height:8px"></div>'}${list}</div></div>`;
+  }
+  function vEditor() {
+    const { rid, id } = S.edit, p = pRow(id), it = p.item, date = MEM.daily_reports.get(rid).report_date;
+    const todayRow = MEM.daily_progress.get(E.ids.progress(rid, id)), qty = todayRow && !todayRow.deleted ? N(todayRow.qty_done) : 0;
+    const before = p.done - qty, trades = live('labour_types'), crew = Object.fromEntries(linesOf('daily_labour', rid, id).map((l) => [l.labour_type_id, l]));
+    const lc = Object.keys(crew).length ? null : lastCrew(id, date);
+    const norms = live('work_item_norms').filter((n) => n.work_item_id === id), used = Object.fromEntries(linesOf('daily_material_usage', rid, id).map((l) => [l.material_id, l]));
+    const mids = [...new Set([...norms.map((n) => n.material_id), ...Object.keys(used)])];
+    const mrows = mids.map((mid) => { const m = MEM.materials.get(mid); if (!m) return ''; const n = norms.find((x) => x.material_id === mid), std = qty * N(n && n.qty_per_unit), u = used[mid];
+      return `<div class="row" style="margin-bottom:6px"><div class="sp"><b>${h(m.code)}</b> <span class="mut">${h(m.unit)}${n ? ' · standard ' + fmt(std, 1) : ''}</span></div><div style="width:110px"><input type="number" inputmode="decimal" data-mat="${mid}" value="${u ? u.qty_used : ''}" placeholder="${n ? fmt(std, 1) : '0'}"></div></div>`; }).join('');
+    const dl = linesOf('daily_delays', rid, id).map((d) => `<div class="row" style="margin-bottom:4px"><span class="sp">${h((MEM.delay_reasons.get(d.reason_id) || {}).name)} · ${fmt(d.hours_lost, 1)} h <span class="mut">${h(d.description)}</span></span><button class="btn bad sm" data-act="deldelay" data-id="${d.id}">✕</button></div>`).join('');
+    const tradeRows = trades.map((t) => { const c = crew[t.id]; return `<div class="row" style="margin-bottom:6px"><div class="sp"><b>${h(t.trade)}</b></div><div class="step"><button data-act="wk" data-t="${t.id}" data-d="-1">−</button><span>${c ? c.workers : 0}</span><button data-act="wk" data-t="${t.id}" data-d="1">+</button></div>
+      <div style="width:62px"><input type="number" inputmode="decimal" data-hrs="${t.id}" value="${c ? c.hours_each : 8}" ${c ? '' : 'disabled'} title="hours"></div></div>`; }).join('');
+    return `<div class="sheet"><div class="top"><b class="sp">${h(it.seq)}. ${itemLabel(it)}</b><button class="btn sm" data-act="closeedit">Done</button></div><div class="body">
+      ${p.check !== 'OK' ? `<div class="banner">${p.check === 'NO RATE' ? 'No contract rate for this size/sub-trade.' : 'Take-off data incomplete (size / ways / length).'} <a href="#" data-act="editrun" data-id="${id}">Fix run data</a></div>` : ''}
+      <div class="card"><div class="mut">${h(it.zone)} · ${it.pipe_size || '?'} mm · ${fmt(p.total_pipes)} pipe(s) × ${fmt(it.length_per_way, 1)} m</div>
+      <div class="row" style="margin-top:6px"><div class="sp"><span class="mut">Run length</span><br><b>${fmt(p.overall, 1)} m</b></div><div class="sp"><span class="mut">Done before today</span><br><b>${fmt(before, 1)} m</b></div><div class="sp"><span class="mut">Remaining</span><br><b>${fmt(Math.max(0, p.overall - before - qty), 1)} m</b></div></div>${p.pct !== null ? bar(p.pct) : ''}</div>
+      <h2>Installed today (metres, all ways)</h2><div class="card"><input type="number" inputmode="decimal" id="qty" data-qty value="${qty || ''}" placeholder="0">
+      <div class="row" style="margin-top:8px"><button class="btn alt sm sp" data-act="addm" data-v="10">+10</button><button class="btn alt sm sp" data-act="addm" data-v="50">+50</button><button class="btn alt sm sp" data-act="finish">Finish run</button></div></div>
+      <h2>Crew on this run (workers × hours)</h2><div class="card">${lc ? `<button class="btn alt sm full" style="margin-bottom:8px" data-act="copycrew">Copy crew from ${lc.date} (${lc.lines.map((l) => l.workers + ' ' + h((MEM.labour_types.get(l.labour_type_id) || {}).trade)).join(', ')})</button>` : ''}${tradeRows}</div>
+      <h2>Materials used today</h2><div class="card">${mrows || '<span class="mut">Enter take-off data to get standard quantities.</span>'}${mids.length ? '<button class="btn alt sm full" data-act="stdmat">Fill with standard quantities</button>' : ''}<div class="mut" style="margin-top:6px">Grey number = standard. Only what you type is recorded, so wastage is real.</div></div>
+      <h2>Delays</h2><div class="card">${dl}<div class="row"><select id="dreason" class="sp">${live('delay_reasons').map((r) => `<option value="${r.id}">${h(r.name)}</option>`).join('')}</select><div style="width:70px"><input id="dhrs" type="number" inputmode="decimal" placeholder="hrs"></div></div>
+      <input id="dnote" placeholder="Note (optional)" style="margin-top:6px"><button class="btn alt sm full" style="margin-top:6px" data-act="adddelay">+ Add delay</button></div>
+      <button class="btn bad full" style="margin-top:14px" data-act="removeday">Remove this run from ${date}</button></div></div>`;
+  }
+  const REPS = [['overview', 'Overview'], ['progress', 'Progress'], ['prod', 'Productivity'], ['mat', 'Material'], ['cost', 'Cost'], ['daily', 'Daily'], ['delay', 'Delays'], ['stock', 'Stock']];
+  function vReports() {
+    const r = R(), t = r.totals, cur = proj().currency || 'RM'; let body = '';
+    if (S.rep === 'overview') {
+      body = `<div class="kpis"><div class="kpi"><b>${t.pct === null ? '–' : fmt(t.pct, 1) + '%'}</b><span>Overall progress (${fmt(t.done)} / ${fmt(t.overall)} m)</span></div><div class="kpi"><b>${t.completed} / ${t.ongoing} / ${t.notstarted}</b><span>Runs done / ongoing / not started</span></div>
+      <div class="kpi"><b>${cur} ${fmt(t.earned)}</b><span>Earned value</span></div><div class="kpi"><b>${cur} ${fmt(t.retention)}</b><span>Retention held (${fmt(proj().retention_pct, 1)}%)</span></div>
+      <div class="kpi"><b>${cur} ${fmt(t.net_claim)}</b><span>Net claimable</span></div><div class="kpi"><b>${cur} ${fmt(t.total_cost)}</b><span>Cost to date (labour ${fmt(t.labour_cost)} + material ${fmt(t.material_cost)})</span></div>
+      <div class="kpi"><b style="color:${t.profit < 0 ? 'var(--bad)' : 'var(--ok)'}">${cur} ${fmt(t.profit)}</b><span>Profit to date ${t.margin_pct === null ? '' : '(' + fmt(t.margin_pct, 1) + '%)'}</span></div><div class="kpi"><b>${cur} ${fmt(t.contract_value)}</b><span>Contract value of take-off</span></div></div>
+      ${t.missing ? `<div class="banner" style="margin-top:10px">${t.missing} run(s) have incomplete take-off data or no rate - see Runs tab.</div>` : ''}
+      <h2>By pipe size</h2>${tbl(['Size', 'Runs', 'Length m', 'Done m', '%'], r.bySize.map((x) => [h(x.key), x.runs, fmt(x.overall, 1), fmt(x.done, 1), x.pct === null ? '–' : fmt(x.pct, 1)]), [1, 2, 3, 4])}
+      <h2>By zone</h2>${tbl(['Zone', 'Runs', 'Length m', 'Done m', '%'], r.byZone.map((x) => [h(x.key), x.runs, fmt(x.overall, 1), fmt(x.done, 1), x.pct === null ? '–' : fmt(x.pct, 1)]), [1, 2, 3, 4])}`;
+    } else if (S.rep === 'progress') body = tbl(['#', 'Run', 'Zone', 'Size', 'Length m', 'Done m', '%', 'Status', 'Last'], r.progress.map((p) => [p.item.seq, h(p.item.manhole_ref), h(p.item.zone), p.item.pipe_size || '–', fmt(p.overall, 1), fmt(p.done, 1), p.pct === null ? '–' : fmt(p.pct, 1), `<span class="st ${stCls(p.status)}">${p.status}</span>`, p.last_date || '–']), [4, 5, 6]);
+    else if (S.rep === 'prod') body = `<h2>By trade</h2>${tbl(['Trade', 'Man-hours', 'Labour cost'], r.byTrade.map((b) => [h(b.trade), fmt(b.man_hours, 1), fmt(b.cost, 2)]), [1, 2])}<h2>By run and trade</h2>` +
+      tbl(['Run', 'Trade', 'Man-h', 'Done m', 'm / man-h', 'Hrs / m', 'Plan hrs/m', 'Prod %'], r.productivity.map((x) => [h(x.item && x.item.manhole_ref), h(x.trade), fmt(x.man_hours, 1), fmt(x.qty_done, 1), fmt(x.output_per_mh, 2), fmt(x.actual_hrs_per_unit, 2), x.planned_hrs_per_unit ? fmt(x.planned_hrs_per_unit, 2) : 'set in Setup', x.productivity_pct === null ? '–' : fmt(x.productivity_pct, 0)]), [2, 3, 4, 5, 6, 7]);
+    else if (S.rep === 'mat') body = `<h2>By material</h2>${tbl(['Material', 'Used', 'Standard', 'Variance', 'Waste %', 'Allowed %', 'Variance cost'], r.byMaterial.map((m) => { const v = m.used - m.theo, w = m.theo > 0 ? (100 * v) / m.theo : null; return [h(m.code), fmt(m.used, 1), fmt(m.theo, 1), fmt(v, 1), w === null ? '–' : `<span style="color:${w > m.allowed ? 'var(--bad)' : 'var(--ok)'}">${fmt(w, 1)}</span>`, fmt(m.allowed, 1), fmt(m.vcost, 2)]; }), [1, 2, 3, 4, 5, 6])}<h2>By run</h2>` +
+      tbl(['Run', 'Material', 'Used', 'Standard', 'Waste %', 'Cost'], r.wastage.map((w) => [h(w.item && w.item.manhole_ref), h(w.code), fmt(w.qty_used, 1), fmt(w.theoretical_qty, 1), w.wastage_pct === null ? '–' : fmt(w.wastage_pct, 1), fmt(w.material_cost, 2)]), [2, 3, 4, 5]);
+    else if (S.rep === 'cost') body = tbl(['Run', 'Earned', 'Labour', 'Material', 'Cost', 'Profit', 'Margin %'], r.cost.filter((c) => c.earned || c.total_cost).map((c) => [h(c.item.manhole_ref), fmt(c.earned, 2), fmt(c.labour_cost, 2), fmt(c.material_cost, 2), fmt(c.total_cost, 2), fmt(c.profit, 2), c.margin_pct === null ? '–' : fmt(c.margin_pct, 1)]), [1, 2, 3, 4, 5, 6]);
+    else if (S.rep === 'daily') body = tbl(['Date', 'Weather', 'Metres', 'Earned', 'Workers', 'Man-h', 'Labour', 'Material', 'Delay h'], r.daily.map((d) => [d.date, h(d.weather), fmt(d.metres, 1), fmt(d.earned, 2), d.headcount, fmt(d.man_hours, 1), fmt(d.labour_cost, 2), fmt(d.material_cost, 2), fmt(d.delay_hours, 1)]), [2, 3, 4, 5, 6, 7, 8]);
+    else if (S.rep === 'delay') body = tbl(['Category', 'Reason', 'Times', 'Hours lost'], r.delays.map((d) => [h(d.category), h(d.reason), d.occurrences, fmt(d.hours_lost, 1)]), [2, 3]);
+    else if (S.rep === 'stock') body = tbl(['Code', 'Material', 'Unit', 'Received', 'Used', 'Balance'], r.stock.map((s) => [h(s.code), h(s.name), h(s.unit), fmt(s.received, 1), fmt(s.used, 1), `<b style="color:${s.balance < 0 ? 'var(--bad)' : 'inherit'}">${fmt(s.balance, 1)}</b>`]), [3, 4, 5]) + '<button class="btn alt full" data-act="addreceipt">+ Record delivery received</button>';
+    return `<div class="tabs">${REPS.map(([k, l]) => `<button class="${S.rep === k ? 'on' : ''}" data-act="rep" data-k="${k}">${l}</button>`).join('')}</div>${body}`;
+  }
+  function vRuns() {
+    const q = S.q.toLowerCase(), f = S.runFilter;
+    const list = R().progress.filter((p) => (!q || (p.item.manhole_ref + ' ' + p.item.zone).toLowerCase().includes(q)) && (f === 'all' || (f === 'missing' && p.check !== 'OK') || (f === 'ongoing' && p.status === 'On Going') || (f === 'done' && p.status === 'Completed')))
+      .map((p) => `<div class="card" data-act="editrun" data-id="${p.item.id}"><div class="row"><b class="sp">${h(p.item.seq)}. ${itemLabel(p.item)}</b><span class="st ${p.check === 'OK' ? stCls(p.status) : 'b'}">${p.check === 'OK' ? p.status : p.check}</span></div>
+      <div class="mut">${h(p.item.zone)} · ${p.item.pipe_size ? p.item.pipe_size + ' mm × ' + p.total_pipes + ' × ' + fmt(p.item.length_per_way, 1) + ' m = ' + fmt(p.overall, 1) + ' m' : 'take-off data needed'}</div>${p.pct !== null ? bar(p.pct) : ''}</div>`).join('');
+    return `<input data-bind="q" placeholder="Search runs" value="${h(S.q)}"><div class="tabs" style="margin-top:8px">${[['all', 'All'], ['missing', 'Needs data'], ['ongoing', 'On going'], ['done', 'Completed']].map(([k, l]) => `<button class="${f === k ? 'on' : ''}" data-act="runf" data-k="${k}">${l}</button>`).join('')}</div>${list}<button class="btn full" data-act="newrun">+ Add run</button>`;
+  }
+  function listCard(title, rows, addAct) { return `<h2>${title}</h2><div class="card">${rows.join('') || '<span class="mut">None</span>'}<button class="btn alt sm full" style="margin-top:8px" data-act="${addAct}">+ Add</button></div>`; }
+  function vSetup() {
+    const cfg = META.cfg || {}, p = proj(), line = (act, id, a, b) => `<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)" data-act="${act}" data-id="${id}"><span class="sp">${a}</span><span class="mut">${b}</span></div>`;
+    return `<div class="banner">Sample rates came from your workbook / placeholders. Check labour rates, contract rates and material prices before trusting cost reports.</div>
+    <h2>Project</h2><div class="card" data-act="editproj"><b>${h(p.name)}</b><div class="mut">Retention ${fmt(p.retention_pct, 1)}% · spacer every ${p.spacer_spacing} m, edge ${p.spacer_edge} m, +${p.spacer_extra} · ${p.plugs_per_way} plugs/way · ${p.subduct_lines} sub-duct lines · tap to edit</div></div>
+    ${listCard('Labour trades (RM / hour)', live('labour_types').map((t) => line('edittrade', t.id, h(t.trade), 'RM ' + fmt(t.hourly_rate, 2) + (N(t.planned_hrs_per_m) ? ' · plan ' + t.planned_hrs_per_m + ' h/m' : ''))), 'newtrade')}
+    ${listCard('Materials (unit cost)', live('materials').map((m) => line('editmat', m.id, h(m.code) + ' <span class="mut">' + h(m.unit) + '</span>', 'RM ' + fmt(m.unit_cost, 2) + ' · waste ' + fmt(N(m.wastage_allow) * 100, 0) + '%')), 'newmat')}
+    ${listCard('Contract rates (per metre)', live('rate_items').map((x) => line('editrate', x.id, h(x.code) + ' · ' + h(x.description) + (x.pipe_size ? ' (' + x.pipe_size + ')' : ''), 'RM ' + fmt(x.rate, 2))), 'newrate')}
+    ${listCard('Delay reasons', live('delay_reasons').map((x) => line('editreason', x.id, h(x.name), h(x.category))), 'newreason')}
+    <h2>Sync (online backup &amp; sharing)</h2><div class="card"><div class="mut" style="margin-bottom:6px">Works offline always. When signal returns, data uploads automatically. State: ${S.sync.state === 'err' ? '<b style="color:var(--bad)">' + h(S.sync.msg) + '</b>' : h(S.sync.msg || (cfg.access_token ? 'ready' : 'not connected'))} · ${pending()} change(s) waiting · last sync ${META.lastSync ? new Date(META.lastSync).toLocaleString() : 'never'}</div>
+      <label>Supabase URL</label><input id="s_url" value="${h(cfg.url || '')}" placeholder="https://xxxx.supabase.co"><label>Supabase anon key</label><input id="s_key" value="${h(cfg.key || '')}"><label>Email</label><input id="s_email" type="email" value="${h(cfg.email || '')}"><label>Password</label><input id="s_pw" type="password">
+      <div class="row" style="margin-top:8px"><button class="btn sp" data-act="signin">Sign in &amp; sync</button><button class="btn alt sp" data-act="syncnow">Sync now</button></div></div>
+    <h2>Backup</h2><div class="card"><div class="row"><button class="btn alt sp" data-act="export">Export backup file</button><button class="btn alt sp" data-act="import">Import backup</button></div><input type="file" id="impf" accept=".json" style="display:none"><div class="mut" style="margin-top:6px">Tip: export a backup weekly. Add to Home Screen so the app opens offline.</div></div>`;
+  }
+  // ---------------- generic form sheet ----------------
+  function vForm() {
+    const f = S.form;
+    return `<div class="sheet" style="z-index:30"><div class="top"><button class="btn alt sm" data-act="formcancel">Cancel</button><b class="sp">${h(f.title)}</b><button class="btn sm" data-act="formsave">Save</button></div><div class="body">${f.fields.map((x) => {
+      const v = f.row[x.k]; const val = v === null || v === undefined ? '' : v;
+      if (x.type === 'select') return `<label>${h(x.label)}</label><select data-f="${x.k}">${x.opts.map((o) => `<option value="${h(o[0])}" ${String(o[0]) === String(val) ? 'selected' : ''}>${h(o[1])}</option>`).join('')}</select>`;
+      return `<label>${h(x.label)}${x.hint ? ' <span class="mut">· ' + h(x.hint) + '</span>' : ''}</label><input data-f="${x.k}" type="${x.type === 'number' ? 'number' : x.type || 'text'}" ${x.type === 'number' ? 'inputmode="decimal" step="any"' : ''} value="${h(val)}">`; }).join('')}
+      ${f.preview ? '<div class="card mut" id="fprev" style="margin-top:10px"></div>' : ''}${f.onDelete ? '<button class="btn bad full" style="margin-top:14px" data-act="formdelete">Delete</button>' : ''}</div></div>`;
+  }
+  function openForm(f) { S.form = f; render(); updatePreview(); }
+  function readForm() { const row = { ...S.form.row }; document.querySelectorAll('[data-f]').forEach((el) => { const k = el.dataset.f, fd = S.form.fields.find((x) => x.k === k); row[k] = fd.type === 'number' ? (el.value === '' ? null : +el.value) : el.value; }); return row; }
+  function updatePreview() { if (!S.form || !S.form.preview) return; const el = $('#fprev'); if (el) el.innerHTML = S.form.preview(readForm()); }
+
+  const tradeOpts = () => [...new Set(live('rate_items').map((r) => r.subtrade))].map((s) => [s, s]);
+  function runForm(row, isNew) {
+    openForm({ title: isNew ? 'New run' : 'Run ' + row.seq, row, fields: [
+      { k: 'manhole_ref', label: 'Manhole ref (from – to)' }, { k: 'ref_code', label: 'Ref (EYD / MYD…)' }, { k: 'zone', label: 'Zone / section' },
+      { k: 'subtrade', label: 'Sub-trade', type: 'select', opts: tradeOpts() },
+      { k: 'pipe_size', label: 'Pipe size (mm)', type: 'number', hint: '110 / 63 / 50' }, { k: 'no_layer', label: 'No. of layers', type: 'number' }, { k: 'no_way', label: 'No. of ways per layer', type: 'number' },
+      { k: 'length_per_way', label: 'Length per way (m, drawing)', type: 'number' }, { k: 'subduct_pipes', label: 'Pipes with sub-duct', type: 'number' },
+      { k: 'rate_override', label: 'Rate override (RM/m)', type: 'number', hint: 'leave empty to use contract rate' }, { k: 'drawing_ref', label: 'Drawing ref' }, { k: 'remarks', label: 'Remarks' } ],
+      preview: (r) => { const d = E.derive(r, live('rate_items')); const pr = proj(), norms = E.deriveNorms(r, pr, live('materials'));
+        return `Pipes: <b>${fmt(d.total_pipes)}</b> · Run length: <b>${fmt(d.overall, 1)} m</b> · Rate: <b>RM ${fmt(d.rate, 2)}</b> · Value: <b>RM ${fmt(d.overall * d.rate)}</b><br>Standard materials for whole run: ${norms.map((n) => h(MEM.materials.get(n.material_id).code) + ' ' + fmt(n.qty_per_unit * d.overall, 0)).join(' · ') || '–'}`; },
+      onSave: (r) => { r.no_layer = r.no_layer || 1; put('work_items', r); regenNorms(r); } });
+  }
+  function simpleForm(title, table, row, fields, extra) { openForm({ title, row, fields, onSave: (r) => { put(table, r); if (extra) extra(r); }, onDelete: row._exists ? () => { del(table, row.id); if (extra) extra(row); } : null }); }
+
+  // ---------------- render + events ----------------
+  function render() {
+    const app = $('#app'); const keep = window.scrollY;
+    const main = S.tab === 'entry' ? vEntry() : S.tab === 'reports' ? vReports() : S.tab === 'runs' ? vRuns() : vSetup();
+    app.innerHTML = `<header id="hdr"></header><main>${main}</main><nav>${[['entry', '✎', 'Daily entry'], ['reports', '▤', 'Reports'], ['runs', '≣', 'Runs'], ['setup', '⚙', 'Setup']].map(([k, i, l]) => `<button class="${S.tab === k ? 'on' : ''}" data-act="tab" data-k="${k}"><b>${i}</b>${l}</button>`).join('')}</nav>` +
+      (S.picker ? vPicker() : '') + (S.edit ? vEditor() : '') + (S.form ? vForm() : '');
+    renderHeader(); window.scrollTo(0, keep);
+  }
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, id = a.dataset.id; if (a.tagName === 'A') e.preventDefault();
+    const rid = S.edit && S.edit.rid, iid = S.edit && S.edit.id;
+    const A = {
+      tab: () => { S.tab = a.dataset.k; S.q = ''; },
+      rep: () => { S.rep = a.dataset.k; }, runf: () => { S.runFilter = a.dataset.k; },
+      syncnow: () => { doSync(true); return 'none'; },
+      pick: () => { S.picker = true; S.q = ''; }, closepick: () => { S.picker = false; },
+      openrun: () => { S.picker = false; S.edit = { rid: ensureReport(S.date), id }; },
+      edit: () => { S.edit = { rid: ensureReport(S.date), id }; }, closeedit: () => { S.edit = null; },
+      addm: () => { const cur = N($('#qty').value); if (setProgress(rid, iid, cur + +a.dataset.v)) { } },
+      finish: () => { const p = pRow(iid), cur = N($('#qty').value); setProgress(rid, iid, Math.max(0, +(p.overall - (p.done - cur)).toFixed(3))); },
+      wk: () => { const l = MEM.daily_labour.get(E.ids.labour(rid, iid, a.dataset.t)), w = (l && !l.deleted ? l.workers : 0) + +a.dataset.d; const lc = lastCrew(iid, MEM.daily_reports.get(rid).report_date); const prev = lc && lc.lines.find((x) => x.labour_type_id === a.dataset.t); setLabour(rid, iid, a.dataset.t, Math.max(0, w), l && !l.deleted ? l.hours_each : prev ? prev.hours_each : 8); },
+      copycrew: () => { lastCrew(iid, MEM.daily_reports.get(rid).report_date).lines.forEach((l) => setLabour(rid, iid, l.labour_type_id, l.workers, l.hours_each)); },
+      stdmat: () => { const q = N($('#qty').value); live('work_item_norms').filter((n) => n.work_item_id === iid).forEach((n) => { const m = MEM.materials.get(n.material_id), v = q * n.qty_per_unit; setMaterial(rid, iid, n.material_id, m.unit === 'm' ? +v.toFixed(1) : Math.ceil(v - 1e-9)); }); },
+      adddelay: () => { const hrs = N($('#dhrs').value); put('daily_delays', { id: E.ids.uid('dl'), project_id: PID, report_id: rid, work_item_id: iid, reason_id: $('#dreason').value, hours_lost: hrs, description: $('#dnote').value }); },
+      deldelay: () => del('daily_delays', id),
+      removeday: () => { if (!confirm('Remove this run from the day? Its progress, crew, materials and delays for this date will be deleted.')) return 'none'; setProgress(rid, iid, 0); ['daily_labour', 'daily_material_usage', 'daily_delays'].forEach((t) => linesOf(t, rid, iid).forEach((l) => del(t, l.id))); S.edit = null; },
+      editrun: () => { S.edit = null; runForm({ ...MEM.work_items.get(id), _exists: 1 }, false); return 'none'; },
+      newrun: () => { const n = live('work_items').length ? Math.max(...live('work_items').map((x) => N(x.seq))) + 1 : 1; runForm({ id: E.ids.uid('wi'), project_id: PID, seq: n, subtrade: 'Telecommunication Work', no_layer: 1, subduct_pipes: 0 }, true); return 'none'; },
+      editproj: () => { simpleForm('Project settings', 'projects', { ...proj() }, [{ k: 'name', label: 'Project name' }, { k: 'retention_pct', label: 'Retention % of contract sum', type: 'number' }, { k: 'spacer_edge', label: 'Spacer edge offset each end (m)', type: 'number' }, { k: 'spacer_spacing', label: 'Spacer spacing (m)', type: 'number' }, { k: 'spacer_extra', label: 'Extra spacers per way', type: 'number' }, { k: 'plugs_per_way', label: 'End plugs per way', type: 'number' }, { k: 'subduct_lines', label: 'Sub-duct lines per pipe', type: 'number' }], () => regenAllNorms()); return 'none'; },
+      newtrade: () => { simpleForm('New trade', 'labour_types', { id: E.ids.uid('lt'), project_id: PID, hourly_rate: 0, planned_hrs_per_m: 0 }, tradeFields); return 'none'; },
+      edittrade: () => { simpleForm('Trade', 'labour_types', { ...MEM.labour_types.get(id), _exists: 1 }, tradeFields); return 'none'; },
+      newmat: () => { simpleForm('New material', 'materials', { id: E.ids.uid('mt'), project_id: PID, unit: 'pcs', unit_cost: 0, wastage_allow: 0 }, matFields, regenAllNorms); return 'none'; },
+      editmat: () => { simpleForm('Material', 'materials', { ...MEM.materials.get(id), _exists: 1 }, matFields, regenAllNorms); return 'none'; },
+      newrate: () => { simpleForm('New contract rate', 'rate_items', { id: E.ids.uid('rt'), project_id: PID, unit: 'm', rate: 0, subtrade: 'Telecommunication Work' }, rateFields); return 'none'; },
+      editrate: () => { simpleForm('Contract rate', 'rate_items', { ...MEM.rate_items.get(id), _exists: 1 }, rateFields); return 'none'; },
+      newreason: () => { simpleForm('New delay reason', 'delay_reasons', { id: E.ids.uid('dr'), project_id: PID }, reasonFields); return 'none'; },
+      editreason: () => { simpleForm('Delay reason', 'delay_reasons', { ...MEM.delay_reasons.get(id), _exists: 1 }, reasonFields); return 'none'; },
+      addreceipt: () => { simpleForm('Delivery received', 'material_receipts', { id: E.ids.uid('rc'), project_id: PID, receipt_date: today(), unit_cost: 0 }, [{ k: 'receipt_date', label: 'Date', type: 'date' }, { k: 'material_id', label: 'Material', type: 'select', opts: live('materials').map((m) => [m.id, m.code + ' - ' + m.name]) }, { k: 'qty', label: 'Quantity', type: 'number' }, { k: 'unit_cost', label: 'Unit cost', type: 'number' }, { k: 'supplier', label: 'Supplier' }, { k: 'do_number', label: 'DO number' }]); S.form.row.material_id = S.form.row.material_id || live('materials')[0].id; return 'none'; },
+      formcancel: () => { S.form = null; },
+      formsave: () => { const f = S.form, row = readForm(); delete row._exists; f.onSave(row); S.form = null; },
+      formdelete: () => { if (!confirm('Delete this item?')) return 'none'; S.form.onDelete(); S.form = null; },
+      signin: async () => { const cfg = { ...(META.cfg || {}), url: $('#s_url').value.trim(), key: $('#s_key').value.trim(), email: $('#s_email').value.trim(), project_id: PID };
+        try { const t = await Sync.signIn(cfg, (u, o) => fetch(u, o), cfg.email, $('#s_pw').value); Object.assign(cfg, t); setMeta('cfg', cfg); toast('Signed in'); doSync(true); } catch (err) { toast(String(err.message)); } return 'none'; },
+      export: () => { const out = {}; TABLES.forEach((t) => (out[t] = [...MEM[t].values()].map(Sync.strip))); const b = new Blob([JSON.stringify(out)], { type: 'application/json' }), u = document.createElement('a'); u.href = URL.createObjectURL(b); u.download = 'site-daily-backup-' + today() + '.json'; u.click(); return 'none'; },
+      import: () => { $('#impf').click(); return 'none'; },
+    };
+    const r = A[act] && A[act](); if (r !== 'none') render();
+  });
+  const tradeFields = [{ k: 'trade', label: 'Trade name' }, { k: 'hourly_rate', label: 'Hourly rate (RM)', type: 'number' }, { k: 'planned_hrs_per_m', label: 'Planned man-hours per metre', type: 'number', hint: 'optional, for productivity %' }];
+  const matFields = [{ k: 'code', label: 'Code (P110, DS110, EP110…)' }, { k: 'name', label: 'Description' }, { k: 'unit', label: 'Unit (m / pcs)' }, { k: 'unit_cost', label: 'Unit cost (RM per unit)', type: 'number' }, { k: 'wastage_allow', label: 'Allowed wastage (0.03 = 3%)', type: 'number' }];
+  const rateFields = [{ k: 'code', label: 'Code' }, { k: 'subtrade', label: 'Sub-trade', type: 'select', opts: [['Telecommunication Work', 'Telecommunication Work'], ['Medium Voltage', 'Medium Voltage'], ['Low Voltage', 'Low Voltage'], ['Extra Low Voltage', 'Extra Low Voltage'], ['Security', 'Security'], ['Street Lighting', 'Street Lighting']] }, { k: 'description', label: 'Description' }, { k: 'pipe_size', label: 'Pipe size (mm) used for auto-match', type: 'number' }, { k: 'rate', label: 'Rate (RM per m)', type: 'number' }];
+  const reasonFields = [{ k: 'code', label: 'Code' }, { k: 'category', label: 'Category' }, { k: 'name', label: 'Reason' }];
+
+  document.addEventListener('change', (e) => {
+    const el = e.target;
+    if (el.dataset.f !== undefined) { updatePreview(); return; }
+    if (el.dataset.bind === 'date') { S.date = el.value || today(); render(); return; }
+    if (['weather', 'rain', 'notes'].includes(el.dataset.bind)) { const rid = ensureReport(S.date), r = { ...MEM.daily_reports.get(rid) }; if (el.dataset.bind === 'weather') r.weather = el.value; if (el.dataset.bind === 'rain') r.rain_hours = N(el.value); if (el.dataset.bind === 'notes') r.notes = el.value; put('daily_reports', r); render(); return; }
+    if (el.id === 'impf') { const f = el.files[0]; if (!f) return; f.text().then((t) => { const d = JSON.parse(t); let n = 0; TABLES.forEach((tb) => (d[tb] || []).forEach((r) => { const l = MEM[tb].get(r.id); if (!l || String(l.updated_at) < String(r.updated_at)) { MEM[tb].set(r.id, { ...r, _dirty: 1 }); n++; } persist(tb, [MEM[tb].get(r.id)]); })); ver++; render(); toast('Imported ' + n + ' rows'); scheduleSync(); }).catch(() => toast('Not a valid backup file')); return; }
+    if (!S.edit) return; const { rid, id } = S.edit;
+    if (el.dataset.qty !== undefined) { if (!setProgress(rid, id, N(el.value))) { /* rejected */ } render(); }
+    else if (el.dataset.hrs) { const l = MEM.daily_labour.get(E.ids.labour(rid, id, el.dataset.hrs)); if (l && !l.deleted) setLabour(rid, id, el.dataset.hrs, l.workers, N(el.value) || 8); render(); }
+    else if (el.dataset.mat) { setMaterial(rid, id, el.dataset.mat, N(el.value)); render(); }
+  });
+  document.addEventListener('input', (e) => { if (e.target.dataset.bind === 'q') { S.q = e.target.value; const pos = e.target.selectionStart; render(); const n = $('[data-bind="q"]'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } } });
+
+  // ---------------- start ----------------
+  async function start() {
+    await initStore(); await seedIfEmpty(); render();
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+    setTimeout(() => doSync(false), 1500);
+  }
+  window.__app = { MEM, S, R, put, setProgress, setLabour, setMaterial, ensureReport, regenAllNorms, store, doSync, pending, render, META, start };
+  start();
+})();
+
+</script>
+</body>
+</html>
